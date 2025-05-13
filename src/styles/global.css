@@ -1,0 +1,87 @@
+/* src/styles/global.css */
+:root {
+    --primary-color: rgba(41, 164, 240, 0.9);
+    --primary-hover: #0056b3;
+    --header-light-h1: #01245c;
+    --dark-blue: #01245c;
+    --dark-blue-rgb: rgb(1, 36, 92); 
+    --accent-color: #4caf50;
+    --secondary-color: #6c757d;
+    --light-bg: #f8f9fa;
+    --dark-bg: #01245c;
+    --text-color: #1d2951;
+    --text-light: #f8f9fa;
+    --green-color: #03be03;
+    --gold-color: #f0c04d;
+    --orange-color: #ffa621;
+    --light-gray: #f5f5f5;
+    --medium-gray: #ddd;
+    --dark-gray: #666;
+
+    /* Basic typography and body styles */
+    --font-family-montserrat: "Montserrat", sans-serif;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+body {
+    margin: 0 auto;
+    font-family: var(--font-family-montserrat);
+    font-size: 1rem;
+    font-weight: 400;
+    /* line-height: 1.2; */
+    color: var(--text-color);
+    background-color: var(--light-bg); /* Default background */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--header-light-h1); /* Default heading color */
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
