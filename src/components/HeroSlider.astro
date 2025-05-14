@@ -1,0 +1,473 @@
+---
+// src/components/HeroSlider.astro
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- IMPORTANT: Image Imports for Local Assets ---
+// Replace these with actual paths to your images within the src/ directory.
+// For example, if your images are in src/assets/images/hero/
+import heroImage1 from '../../src/assets/images/hero/Luxury-guest- Room-Automation-revolution-1.png';
+import heroImage2 from '../../src/assets/images/hero/Luxury Living Room Chandelier.png';
+import heroImage3 from '../../src/assets/images/hero/madrix-voxel-dance-floor-2.png';
+// If you don't have local images yet, you can keep using remote URLs as strings.
+
+// Define the structure for each slide's data
+export interface Slide {
+  smallHeading?: string;
+  mainHeading: string;
+  paragraph: string;
+  button1Text: string;
+  button1Link: string;
+  button2Text: string;
+  button2Link: string;
+  imageUrl: ImageMetadata; 
+  imageAlt: string;
+}
+
+// --- Sample Slide Data ---
+const slides: Slide[] = [
+  {
+    smallHeading: "Philips Dynalite",
+    mainHeading: "Transform Every Space with Intelligent Light",
+    paragraph: "Philips Dynalite Automation Systems: Precision-engineered for homes, offices, and hospitality spaces. Experience effortless control and smarter environments.", 
+    button1Text: "GET AN ESTIMATE",
+    button1Link: "/contacts",
+    button2Text: "SEE OUR PROJECTS",
+    button2Link: "/projects",
+    imageUrl: heroImage1,
+    imageAlt: "luxury guest room with Philips Dynalite touch button installed on wall"
+  },
+  {
+    smallHeading: "led Lighting",
+    mainHeading: "Elevate Your Space with Timeless Illumination",
+    paragraph: "Discover Philips & Dalux LED Fixtures — engineered for unwavering reliability and decades of brilliant performance. Where quality meets longevity.",
+    button1Text: "VIEW PROJECTS",
+    button1Link: "/projects",
+    button2Text: "Explore Collection",
+    button2Link: "/products",
+    imageUrl: heroImage2,
+    imageAlt: "led round light fixture suspended in a ceiling"
+  },
+  {
+    smallHeading: "Madrix DMX",
+    mainHeading: "Unleash Infinite Creativity with Pixel-Perfect Control",
+    paragraph: "MADRIX DMX Systems: Master dynamic 2D & 3D LED RGB displays with precision-engineered pixel control. Transform visions into vivid reality.",
+    button1Text: "Explore Solutions",
+    button1Link: "/contacts",
+    button2Text: "ABOUT US",
+    button2Link: "/about",
+    imageUrl: heroImage3,
+    imageAlt: "Handyman smiling and holding a wrench"
+  }
+];
+
+// Define the widths array as a constant
+const imageDisplayWidths = [640, 768, 1024, 1280, 1536];
+---
+
+<div class="hero-slider">
+  <div class="slides-container">
+    {slides.map((slide, index) => (
+      <div class={`slide ${index === 0 ? 'active' : ''}`} data-index={index}>
+        <Image
+          src={slide.imageUrl}
+          alt={slide.imageAlt}
+          class="slide-background"
+          loading={index === 0 ? "eager" : "lazy"}
+          decoding="async"
+          widths={imageDisplayWidths}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1280px"
+          quality={80}
+          format="webp"
+          fetchpriority={index === 0 ? "high" : "auto"}
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 1
+          }}
+        />
+        <div class="slide-overlay"></div>
+        <div class="slide-content container">
+          {slide.smallHeading && <p class="small-heading">{slide.smallHeading}</p>}
+          <h1 class="main-heading">{slide.mainHeading}</h1>
+          <p class="paragraph">{slide.paragraph}</p>
+          <div class="slide-buttons">
+            <a href={slide.button1Link} class="btn btn-primary">{slide.button1Text}</a>
+            <a href={slide.button2Link} class="btn btn-secondary">{slide.button2Text}</a>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button class="slider-nav prev" aria-label="Previous slide">
+    <span class="material-symbols-outlined">arrow_back_ios</span>
+  </button>
+  <button class="slider-nav next" aria-label="Next slide">
+    <span class="material-symbols-outlined">arrow_forward_ios</span>
+  </button>
+
+  <div class="slider-pagination">
+    {slides.map((_, index) => (
+      <button class={`dot ${index === 0 ? 'active' : ''}`} data-slide-to={index} aria-label={`Go to slide ${index + 1}`}></button>
+    ))}
+  </div>
+</div>
+
+<style>
+  /* Ensure global CSS with color variables is imported in layout */
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    height: 70vh; 
+    min-height: 450px; 
+    max-height: 800px; 
+    overflow: hidden; 
+    background-color: var(--dark-blue); 
+  }
+
+  .slides-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out; 
+    visibility: hidden; 
+    display: flex; 
+    align-items: center; 
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10; 
+  }
+
+  .slide-background {
+    /* Most visual styling like object-fit is handled inline by the style prop */
+  }
+  
+  .slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(1, 36, 92, 0.6); 
+    z-index: 2; 
+  }
+
+  .slide-content {
+    position: relative; 
+    z-index: 3;
+    color: var(--text-light);
+    max-width: 600px; 
+    padding: 2rem; 
+    text-align: left; 
+  }
+
+  .small-heading {
+    color: var(--primary-color); 
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .main-heading {
+    color: var(--text-light);
+    font-size: 2.8rem; 
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .paragraph {
+    color: var(--light-gray); 
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 500px; 
+  }
+
+  .slide-buttons {
+    display: flex;
+    gap: 1rem; 
+  }
+
+  .btn {
+    padding: 0.75rem 1.75rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px; 
+  }
+
+  .btn-primary { 
+    background-color: var(--light-bg);
+    color: var(--dark-blue);
+    border: 2px solid var(--light-bg);
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--primary-color);
+    color: var(--dark-blue);
+    border-color: var(--dark-blue);
+  }
+
+  .btn-secondary { 
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: 2px solid var(--primary-color);
+  }
+  .btn-secondary:hover,
+  .btn-secondary:focus {
+    background-color: var(--primary-hover);
+    color: var(--text-light);
+    border-color: var(--primary-hover);
+  }
+
+  .slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 15; 
+    transition: background-color 0.3s ease;
+  }
+  .slider-nav:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  .slider-nav.prev {
+    left: 1rem;
+  }
+  .slider-nav.next {
+    right: 1rem;
+  }
+  .slider-nav .material-symbols-outlined {
+    font-size: 1.5rem;
+    padding: 0; 
+  }
+
+  .slider-pagination {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.75rem;
+    z-index: 15;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s ease;
+  }
+  .dot.active,
+  .dot:hover {
+    background-color: var(--text-light);
+  }
+
+  @media (max-width: 768px) {
+    .hero-slider {
+        height: 60vh; 
+        min-height: 400px;
+    }
+    .slide-content {
+        padding: 1.5rem;
+        max-width: 90%; 
+        text-align: center; 
+    }
+    .main-heading {
+        font-size: 2rem; 
+    }
+    .paragraph {
+        font-size: 0.9rem;
+        max-width: 100%; 
+        margin-bottom: 1.5rem;
+    }
+    .slide-buttons {
+        flex-direction: column; 
+        align-items: center; 
+        gap: 0.75rem;
+    }
+    .btn {
+        width: 80%; 
+        max-width: 300px;
+    }
+    .slider-nav {
+        width: 35px;
+        height: 35px;
+    }
+    .slider-nav .material-symbols-outlined {
+        font-size: 1.2rem;
+    }
+    .slider-pagination {
+        bottom: 1rem;
+    }
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+  }
+   @media (max-width: 480px) {
+     .main-heading {
+        font-size: 1.6rem;
+     }
+     .small-heading {
+        font-size: 0.8rem;
+     }
+     .btn {
+        width: 90%;
+     }
+   }
+</style>
+
+<script>
+  // Define proper types for HTML elements
+  interface SliderElement extends HTMLElement {
+    querySelector<E extends Element = Element>(selectors: string): E | null;
+    querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
+  }
+
+  interface SlideElement extends HTMLElement {
+    classList: DOMTokenList;
+  }
+
+  interface DotElement extends HTMLElement {
+    classList: DOMTokenList;
+    getAttribute(name: string): string | null;
+  }
+
+  function initializeHeroSlider(sliderElement: SliderElement): void {
+    const slidesContainer = sliderElement.querySelector<HTMLElement>('.slides-container');
+    const slides = sliderElement.querySelectorAll<SlideElement>('.slide');
+    const prevButton = sliderElement.querySelector<HTMLButtonElement>('.slider-nav.prev');
+    const nextButton = sliderElement.querySelector<HTMLButtonElement>('.slider-nav.next');
+    const dots = sliderElement.querySelectorAll<DotElement>('.slider-pagination .dot');
+    
+    let currentSlide = 0;
+    let slideInterval: number | undefined = undefined;
+    const autoPlayDelay = 6000;
+
+    function showSlide(index: number): void {
+      if (index >= slides.length) {
+        index = 0;
+      } else if (index < 0) {
+        index = slides.length - 1;
+      }
+
+      slides.forEach((slide: SlideElement, i: number) => {
+        slide.classList.remove('active');
+        if (i === index) {
+          slide.classList.add('active');
+        }
+      });
+
+      if (dots.length > 0) {
+        dots.forEach((dot: DotElement, i: number) => {
+          dot.classList.remove('active');
+          if (i === index) {
+            dot.classList.add('active');
+          }
+        });
+      }
+      currentSlide = index;
+    }
+
+    function next(): void {
+      showSlide(currentSlide + 1);
+    }
+
+    function prev(): void {
+      showSlide(currentSlide - 1);
+    }
+
+    function startAutoPlay(): void {
+      stopAutoPlay();
+      slideInterval = window.setInterval(next, autoPlayDelay) as unknown as number;
+    }
+
+    function stopAutoPlay(): void {
+      if (slideInterval !== undefined) {
+        window.clearInterval(slideInterval);
+        slideInterval = undefined;
+      }
+    }
+
+    if (nextButton) {
+      nextButton.addEventListener('click', () => {
+        next();
+        stopAutoPlay();
+      });
+    }
+
+    if (prevButton) {
+      prevButton.addEventListener('click', () => {
+        prev();
+        stopAutoPlay();
+      });
+    }
+
+    if (dots.length > 0) {
+      dots.forEach((dot: DotElement) => {
+        dot.addEventListener('click', (e: MouseEvent) => {
+          const target = e.target as DotElement;
+          const slideIndexStr = target.getAttribute('data-slide-to');
+          if (slideIndexStr) {
+            const slideIndex = parseInt(slideIndexStr, 10);
+            showSlide(slideIndex);
+            stopAutoPlay();
+          }
+        });
+      });
+    }
+    
+    // Initialize
+    showSlide(0);
+    startAutoPlay();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll<SliderElement>('.hero-slider');
+    sliders.forEach((slider) => {
+      initializeHeroSlider(slider);
+    });
+  });
+</script>
