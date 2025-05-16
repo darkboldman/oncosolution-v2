@@ -29,6 +29,7 @@ body {
     font-family: var(--font-family-montserrat);
     font-size: 1rem;
     font-weight: 400;
+    box-sizing: border-box;
     /* line-height: 1.2; */
     color: var(--text-color);
     background-color: var(--light-bg); /* Default background */

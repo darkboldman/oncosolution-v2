@@ -2,12 +2,20 @@
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSlider from '../components/HeroSlider.astro';
+import WhatWeDo from '../components/WhatWeDo.astro';
+import ProjectHighlights from '../components/ProjectHighlights.astro';
+import ServiceHighlights from '../components/ServiceHighlights.astro';
+import ClientLogos from '../components/ClientLogos.astro';
 // Import other components you'll use on this page
 
 // import FeaturesSection from '../components/FeaturesSection.astro';
 ---
 <BaseLayout title="Home - Onco Solutions" description="Welcome to Onco Solutions Home Page">
    <HeroSlider /> 
+   <WhatWeDo />
+   <ClientLogos />
+   <ProjectHighlights />
+   <ServiceHighlights />
 
 </BaseLayout>
 

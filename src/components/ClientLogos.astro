@@ -1,0 +1,238 @@
+---
+// src/components/ClientLogos.astro
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- IMPORTANT: Image Imports for Local Assets ---
+// You will need to import each of your client logos.
+// Replace these placeholders with actual paths to your logo images within the src/ directory.
+// For example, if your logos are in src/assets/images/clients/
+import clientLogo1 from '/src/assets/images/logo/clients/cinnamon-dhonveli.png';
+import clientLogo2 from '/src/assets/images/logo/clients/sofia-colombo.png';
+import clientLogo3 from '/src/assets/images/logo/clients/sampath-centre.jpg';
+import clientLogo4 from '/src/assets/images/logo/clients/ulagalla-resort.jpg';
+import clientLogo5 from '/src/assets/images/logo/clients/nsbm-homagama.jpg';
+import clientLogo6 from '/src/assets/images/logo/clients/maalifushi-resort.jpg';
+import clientLogo7 from '/src/assets/images/logo/clients/jetwing lake dambulla.png';
+import clientLogo8 from '/src/assets/images/logo/clients/heritance-negambo.jpg';
+import clientLogo9 from '/src/assets/images/logo/clients/barcelo-resort-male.png';
+import clientLogo10 from '/src/assets/images/logo/clients/altair-colombo.png';
+import clientLogo11 from '/src/assets/images/logo/clients/icbt-kurunegala.png';
+import clientLogo12 from '/src/assets/images/logo/clients/jetwing-colombo-7.jpg';
+import clientLogo13 from '/src/assets/images/logo/clients/lanka-telecom.png';
+import clientLogo14 from '/src/assets/images/logo/clients/toyota-lanka.jpg';
+import clientLogo15 from '/src/assets/images/logo/clients/university-of-peradeniya-eoa.jpg';
+import clientLogo16 from '/src/assets/images/logo/clients/srilankan-air-cargo.png';
+import clientLogo17 from '/src/assets/images/logo/clients/hard-rock-maldives.jpg';
+// Add more imports as needed, up to your 24+ logos
+
+interface ClientLogo {
+  src: ImageMetadata; // For imported local images or remote URL strings
+  alt: string;
+  url?: string; // Optional: if you want to link the logo to the client's website
+}
+
+// --- Sample Client Logos Data ---
+// Populate this array with your client logo data.
+const clientLogos: ClientLogo[] = [
+  { src: clientLogo1, alt: "Cinnamon Dhonveli Maldives", url: "https://www.cinnamonhotels.com/cinnamon-dhonveli-maldives?utm_source=google&utm_medium=organic&utm_campaign=cinnamondhonvelimaldives&utm_term=gbp" },
+  { src: clientLogo2, alt: "Sofia Hotels colombo Sri lanka", url: "https://www.sofiacolombo.com/" },
+  { src: clientLogo3, alt: "Sampath Bank Colombo Sri lanka", url: "https://www.sampath.lk/" },
+  { src: clientLogo4, alt: "Uga - Ulagalla Luxury resort Thirippane", url: "https://www.ugaescapes.com/ulagalla/gallery.html" },
+  { src: clientLogo5, alt: "NSBM Green University", url: "https://www.nsbm.ac.lk/" },
+  { src: clientLogo6, alt: "Maalifushi-resorts-Maldives", url: "https://www.comohotels.com/maldives/como-maalifushi?utm_source=Google&utm_medium=GoogleMyBusiness&utm_campaign=GMBprofile"},
+  { src: clientLogo7, alt: "Jetwing Lake Dambulla", url:"https://www.jetwinghotels.com/jetwinglake/#gref" },
+  { src: clientLogo8, alt: "Heritance Hotels Negambo", url:"https://www.heritancehotels.com/sentido-heritance/?utm_source=google&utm_medium=organic&utm_campaign=negombo&utm_term=gbp" },
+  { src: clientLogo9, alt: "Barcelo Resort Male", url: "https://www.barcelo.com/en-ww/barcelo-nasandhura-male/?utm_source=google&utm_medium=organic&utm_campaign=my_business&utm_content=46876" },
+  { src: clientLogo10, alt: "Altair Colombo", url: "https://www.altair.lk/" },
+  { src: clientLogo11, alt: "ICBT Kurunegala", url: "https://icbt.lk/facilities/" },
+  { src: clientLogo12, alt: "Jetwing Colombo 7", url: "https://www.jetwinghotels.com/jetwingcolomboseven/#gref" },
+  { src: clientLogo13, alt: "Lanka Telecom", url: "https://www.slt.lk/"},
+  { src: clientLogo14, alt: "Toyota Lanka", url: "https://www.toyota.lk/"},
+  { src: clientLogo15, alt: "University Of Peradeniya", url: "https://eeu.pdn.ac.lk/EOE_Pereira_Theatre"},
+  { src: clientLogo16, alt: "Sri Lankan Air Lines Cargo", url: "https://client-website.com/"},
+  { src: clientLogo17, alt: "Hard Rock Maldives", url: "https://hotel.hardrock.com/maldives/?utm_source=organic&utm_medium=gmb&utm_campaign=hardrockmaldives"},
+  // For seamless scrolling, the list of logos will be duplicated in the template.
+  // So, provide your unique logos here once.
+  // Add more client logos here... e.g.:
+  // { src: clientLogo9, alt: "Client Company 9" },
+  // ... up to clientLogo24 and beyond
+];
+
+const sectionHeading: string = "Some of Our Valued Clients";
+
+// Determine how many logos to display effectively in one scroll pass.
+// The animation duplicates the list, so this is the number of unique logos visible at a time.
+// Adjust based on logo widths and desired density.
+const logosPerView = 8; // Example: show 8 logos before repeating
+const animationDuration = clientLogos.length > logosPerView ? clientLogos.length * 3 : logosPerView * 3; // Adjust multiplier for speed (e.g., 3s per logo)
+---
+
+<section class="client-logos-section">
+  <div class="container">
+    <h2 class="section-heading"><span>{sectionHeading}</span></h2>
+    <div class="logos-slider">
+      <div class="logos-track" style={`--animation-duration: ${animationDuration}s; --logo-count: ${clientLogos.length};`}>
+        {clientLogos.map(logo => (
+          <div class="logo-item">
+            {logo.url ? (
+              <a href={logo.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${logo.alt}`}>
+                <Image src={logo.src} alt={logo.alt} format="webp" quality={75} loading="lazy" decoding="async" />
+              </a>
+            ) : (
+              <Image src={logo.src} alt={logo.alt} format="webp" quality={75} loading="lazy" decoding="async" />
+            )}
+          </div>
+        ))}
+        {clientLogos.map(logo => ( /* Duplicate for infinite scroll effect */
+          <div class="logo-item" aria-hidden="true">
+             {logo.url ? (
+              <a href={logo.url} target="_blank" rel="noopener noreferrer" tabindex="-1">
+                <Image src={logo.src} alt="" format="webp" quality={75} loading="lazy" decoding="async" />
+              </a>
+            ) : (
+              <Image src={logo.src} alt="" format="webp" quality={75} loading="lazy" decoding="async" />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Ensure global CSS with color variables is imported in your layout */
+
+  .client-logos-section {
+    padding: 1rem 0; /* Slightly less padding than main sections */
+    background-color: var(--light-bg); /* Or var(--light-bg) */
+    text-align: center;
+    overflow-x: hidden; /* Crucial for preventing scrollbars from animation */
+    box-sizing: border-box;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .section-heading {
+    font-size: 1.3rem; /* Smaller font size for this heading */
+    color: var(--dark-blue);
+    font-weight: 600; /* Slightly less bold than main headings */
+    margin-bottom: 2.5rem; /* Space below heading */
+    position: relative;
+    display: inline-block; /* To make underline only span text */
+  }
+  .section-heading span {
+    position: relative;
+    padding-bottom: 0.5rem; /* Space for the underline */
+  }
+  .section-heading span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%); /* Center the underline */
+    width: 50px; /* Length of the underline */
+    height: 3px;  /* Thickness of the underline */
+    background-color: var(--primary-color); /* Blue underline */
+  }
+
+  .logos-slider {
+    width: 100%;
+    overflow: hidden; /* Hide parts of the track that are outside */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* Optional: fade edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+
+  .logos-track {
+    display: flex;
+    /* Width is 200% because we duplicate the logos for a seamless loop */
+    /* Each logo item will have a fixed width, so calculate total width based on that */
+    /* width: calc(var(--logo-count) * 2 * (120px + 2 * 2rem)); /* Example: logo width + margins/paddings */
+    width: max-content; /* Let the content determine the width */
+    animation: scrollLogos var(--animation-duration, 60s) linear infinite;
+    will-change: transform; /* Optimize animation */
+  }
+  .logos-slider:hover .logos-track {
+    animation-play-state: paused; /* Pause animation on hover */
+  }
+
+  .logo-item {
+    flex-shrink: 0; /* Prevent logos from shrinking */
+    padding: 0 1.5rem; /* Spacing around each logo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px; /* Consistent height for all logos */
+    box-sizing: content-box; /* Ensure padding doesn't affect specified width if any */
+  }
+  .logo-item img,
+  .logo-item :global(astro-image) img { /* Target the img tag inside astro-image */
+    max-height: 100%; /* Ensure logo fits within the height */
+    max-width: 120px; /* Max width for individual logos, adjust as needed */
+    object-fit: contain; /* Scale down to fit, preserving aspect ratio */
+    filter: grayscale(100%); /* Grayscale by default */
+    opacity: 0.7;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+  .logo-item:hover img,
+  .logo-item:hover :global(astro-image) img {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  .logo-item a {
+    display: flex; /* Ensure link takes up the item space */
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+
+  @keyframes scrollLogos {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Scroll by the width of one set of logos */
+      transform: translateX(calc(-100% / 2)); /* Divide by 2 because we duplicated the track */
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .section-heading {
+      font-size: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .logo-item {
+      height: 50px; /* Slightly smaller logos on tablet */
+      padding: 0 1rem;
+    }
+    .logo-item img,
+    .logo-item :global(astro-image) img {
+      max-width: 100px;
+    }
+  }
+  @media (max-width: 480px) {
+    .section-heading {
+      font-size: 1.4rem;
+    }
+    .logo-item {
+      height: 40px; /* Even smaller logos on mobile */
+      padding: 0 0.75rem;
+    }
+    .logo-item img,
+    .logo-item :global(astro-image) img {
+      max-width: 80px;
+    }
+     .logos-slider { /* Remove fading mask on very small screens if it cuts off too much */
+        mask-image: none;
+        -webkit-mask-image: none;
+    }
+  }
+
+</style>

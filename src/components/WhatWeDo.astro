@@ -1,0 +1,257 @@
+---
+// src/components/WhatWeDo.astro
+
+// Define the structure for each service item
+export interface ServiceItem {
+  icon: string; // Material Symbols icon name
+  title: string;
+  description: string;
+}
+
+// Define the service items based on your provided text
+const services: ServiceItem[] = [
+  {
+    icon: "settings_suggest", // Or 'lightbulb_circle', 'tune'
+    title: "Lighting Automation",
+    description: "We are trained and authorised to install Philips Dynalite and Schneider C-Bus systems—offering reliable control of lighting, HVAC, and security. We also specialise in DALI bus installations for flexible, energy-efficient lighting solutions."
+  },
+  {
+    icon: "highlight", // Or 'palette', 'blur_circular'
+    title: "LED Lighting",
+    description: "We offer premium LED lighting solutions including Philips LED lighting, Dalux lighting, RGB lighting, linear and round aluminium profiles, Moonlight LED systems, and custom LED fixtures — combining innovation, design, and performance for any space."
+  },
+  {
+    icon: "memory_alt", // Or 'grid_view', 'developer_mode_tv'
+    title: "Madrix DMX Lighting",
+    description: "We offer MADRIX DMX solutions for dynamic lighting control, pixel mapping, and show design — trained by Madrix for combining powerful software and hardware to create stunning visual experiences.Advanced DMX lighting for precise LED pixel control and dynamic visual effects."
+  },
+  {
+    icon: "engineering", // Or 'groups', 'construction'
+    title: "Experienced Team",
+    description: "Our highly trained, experienced team is dedicated to delivering lighting and automation solutions with precision, innovation, and excellence. Small enough to care, large enough to deliver — whether your project is intimate or expansive, we bring the same dedication to quality, innovation, and client satisfaction."
+  }
+];
+
+const sectionTitle: string = "What We Do";
+const introParagraph: string = "At Onco Solutions, we are proud to be one of Sri Lanka's leading specialists in LED lighting and lighting automation. With over 15 years of proven experience, we deliver intelligent solutions tailored for the Hospitality industry, Banquet Halls, Function Centres, Board Rooms, Auditoriums, Showrooms, Offices, and Industrial Facilities.";
+const introParagraph2: string = "Beyond automation, we offer complete LED lighting fixture customisation to meet unique design and performance needs. Our electrical installation and turnkey project management services ensure smooth execution from concept to completion, delivering exceptional quality and value.";
+const introParagraph3: string = "We are proud to have successfully delivered landmark projects both in Sri Lanka and internationally, building a trusted reputation for excellence, reliability, and forward-thinking solutions.";
+const buttonText: string = "Discover Our Expertise";
+const buttonLink: string = "/services"; // Example link, change as needed
+---
+
+<section class="what-we-do-section">
+  <div class="container">
+    <div class="section-intro">
+      <h2 class="section-title">
+        <span>{sectionTitle}</span>
+      </h2>
+      <p class="intro-paragraph">{introParagraph}</p>
+      <p class="intro-paragraph">{introParagraph2}</p>
+      <p class="intro-paragraph">{introParagraph3}</p>
+      <a href={buttonLink} class="btn btn-primary">{buttonText}</a>
+    </div>
+    <div class="services-grid">
+      {services.map(service => (
+        <div class="service-item">
+          <div class="service-icon-wrapper">
+            <span class="material-symbols-outlined service-icon">{service.icon}</span>
+          </div>
+          <h3 class="service-title">{service.title}</h3>
+          <p class="service-description">{service.description}</p>
+          </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Ensure global CSS with color variables is imported in your layout */
+  /* For example, in src/layouts/BaseLayout.astro: import '../styles/global.css'; */
+  /* Also ensure Material Symbols font is linked in your BaseLayout.astro <head> */
+  /* <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> */
+
+  .what-we-do-section {
+    padding: 2rem 1rem 1rem 1rem; /* Added horizontal padding */
+    background-color: var(--light-gray);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+
+  .container {
+    /* Assuming .container is defined globally for max-width and centering */
+    /* If not, add below: */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box; /* Include padding in width calculation */
+    display: grid;
+    grid-template-columns: 1fr; /* Single column by default for mobile */
+    gap: 2.5rem; /* Gap between intro and grid on mobile */
+    width: 100%; /* Ensure the container is not wider than its parent */
+  }
+
+  @media (min-width: 768px) { /* Tablet and above */
+    .container {
+      grid-template-columns: 1fr 2fr; /* Two columns: intro left, grid right */
+      gap: 3rem; /* Gap between columns */
+      align-items: flex-start; /* Align items to the top of their grid area */
+    }
+  }
+
+  .section-intro {
+    /* Styles for the left column (title, paragraph, button) */
+    width: 100%; /* Ensure not exceeding parent width */
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    color: var(--dark-blue); /* Using dark-blue from your palette */
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    position: relative;
+    display: inline-block; /* To make the underline only span the text */
+    word-break: break-word; /* Allow words to break if needed */
+  }
+  .section-title span {
+    position: relative;
+    padding-bottom: 0.5rem; /* Space for the underline */
+  }
+  .section-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px; /* Width of the underline */
+    height: 4px; /* Thickness of the underline */
+    background-color: var(--primary-color); /* Accent color for underline */
+  }
+
+  .intro-paragraph {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    width: 100%; /* Ensure not exceeding parent width */
+    word-wrap: break-word; /* Allow long words to be broken */
+  }
+
+  .btn { /* General button styles - can be global or specific */
+    padding: 0.75rem 1.75rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%; /* Don't exceed container width */
+  }
+
+  .btn-primary { /* Specific style for the "Read More" button */
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: 2px solid var(--primary-color);
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--primary-hover);
+    color: var(--text-light);
+    border-color: var(--primary-hover);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1rem; /* Reduced gap for mobile */
+    width: 100%; /* Ensure not exceeding parent width */
+  }
+
+  @media (min-width: 768px) {
+    .services-grid {
+      gap: 2rem; /* Larger gap for desktop */
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) { /* Tablet specific: 2 columns for services */
+    .intro-paragraph {
+    font-size: 0.9rem;
+    }
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.2rem;
+    }
+  }
+  /* For smaller screens, ensure grid items stay within viewport */
+  @media (max-width: 767px) {
+    .services-grid {
+      grid-template-columns: 1fr; /* Force single column on smallest screens */
+    }
+  }
+
+  .service-item {
+    background-color: var(--light-bg); /* Or #fff if section bg is light-gray */
+    padding: 1.5rem;
+    border-radius: 8px;
+    /* Optional: add a subtle shadow or border if desired */
+    /* box-shadow: 0 4px 12px rgba(0,0,0,0.05); */
+    /* border: 1px solid var(--medium-gray); */
+    text-align: left; /* Align text to left as per image */
+    width: 100%; /* Ensure not exceeding parent width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow-wrap: break-word; /* Ensure long words don't cause overflow */
+  }
+
+  .service-icon-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  .service-icon {
+    font-size: 2.5rem; /* Size of the Material Icon */
+    color: var(--primary-color); /* Icon color */
+    /* Optional: background circle for icon like in some designs */
+    /* background-color: rgba(var(--primary-color-rgb), 0.1); /* Needs --primary-color-rgb defined */
+    /* padding: 0.75rem; */
+    /* border-radius: 50%; */
+    /* display: inline-flex; */
+  }
+
+  .service-title {
+    font-size: 1.25rem;
+    color: var(--dark-blue);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    word-wrap: break-word; /* Allow long words to be broken */
+  }
+
+  .service-description {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    line-height: 1.6;
+    margin-bottom: 1rem; /* Space before optional details link */
+    word-wrap: break-word; /* Allow long words to be broken */
+  }
+
+  .details-link {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+  }
+  .details-link:hover {
+    text-decoration: underline;
+    color: var(--primary-hover);
+  }
+  .details-link .material-symbols-outlined {
+    font-size: 1rem; /* Size of the arrow icon */
+    margin-left: 0.25rem;
+  }
+</style>

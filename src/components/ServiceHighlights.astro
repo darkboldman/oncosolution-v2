@@ -1,0 +1,382 @@
+---
+// src/components/ServiceHighlights.astro
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- IMPORTANT: Image Import for Local Asset ---
+// Replace this with the actual path to your image within the src/ directory.
+// For example, if your image is in src/assets/images/services/
+import serviceHighlightImage from '/src/assets/images/webpages/Luxury-guest- Room-Automation-revolution-1.png'; // Placeholder path
+
+interface HighlightItem {
+  icon: string; // Material Symbols icon name
+  title: string;
+  description: string;
+}
+
+interface ServiceHighlightContent {
+  mainHeading: string;
+  paragraph: string;
+  highlights: HighlightItem[];
+  buttonText: string;
+  buttonLink: string;
+  imageSrc: ImageMetadata; // For imported local image or remote URL
+  imageAlt: string;
+  imageBadgeText?: string; // Optional text for the badge on the image
+}
+
+// --- Sample Content ---
+// Customize this with your actual service details
+const content: ServiceHighlightContent = {
+  mainHeading: "Lighting Automation For Guest Rooms",
+  paragraph: "We deliver advanced lighting automation solutions designed for hospitality, residential spaces, and everything in between – enhancing comfort, convenience, and energy efficiency. From cozy guest rooms to luxury homes, our systems offer effortless control and an elevated experience.",
+  highlights: [
+    {
+      icon: "tips_and_updates", // Google Material Symbol
+      title: "Innovative Solutions",
+      description: "Solutions with C-Bus, Dynalite, and other leading components to optimize lighting control for your specific needs."
+    },
+    {
+      icon: "verified", // Google Material Symbol
+      title: "Quality Components",
+      description: "Wide selection of LED fittings and accessories to complete your lighting project. From sleek designs to specialized components."
+    }
+  ],
+  buttonText: "Contact us",
+  buttonLink: "/contact", // As requested
+  imageSrc: serviceHighlightImage, // Using the imported local image
+  imageAlt: "Modern hotel room with smart lighting automation panel",
+  imageBadgeText: "15+ Years Experience" // Example badge text
+};
+
+const imageDisplayWidths: number[] = [480, 640, 768, 960, 1280];
+---
+
+<section class="service-highlights-section">
+  <div class="container service-highlights-grid">
+    <div class="text-content-column">
+      <h2 class="main-heading"><span>{content.mainHeading}</span></h2>
+      <p class="description-paragraph">{content.paragraph}</p>
+      <div class="highlight-items-container">
+        {content.highlights.map(item => (
+          <div class="highlight-item">
+            <div class="highlight-icon-wrapper">
+              <span class="material-symbols-outlined highlight-icon">{item.icon}</span>
+            </div>
+            <div class="highlight-text">
+              <h3 class="highlight-title">{item.title}</h3>
+              <p class="highlight-description">{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <a href={content.buttonLink} class="btn btn-primary service-contact-btn">{content.buttonText}</a>
+    </div>
+
+    <div class="image-column">
+      <div class="image-wrapper">
+        <Image
+          src={content.imageSrc}
+          alt={content.imageAlt}
+          widths={imageDisplayWidths}
+          sizes="(max-width: 767px) 90vw, (max-width: 991px) 45vw, 600px"
+          format="webp"
+          quality={80}
+          loading="lazy"
+          decoding="async"
+          class="highlight-main-image"
+        />
+        {content.imageBadgeText && (
+          <div class="image-badge">
+            <span class="badge-text">{content.imageBadgeText.split(' ')[0]}</span>
+            <span class="badge-subtext">{content.imageBadgeText.substring(content.imageBadgeText.indexOf(' ') + 1)}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Ensure global CSS with color variables is imported in your layout */
+  /* Also ensure Material Symbols font is linked in BaseLayout.astro <head> */
+
+  .service-highlights-section {
+    padding: 4rem 0;
+    background-color: var(--light-gray); /* Or var(--light-gray) */
+    overflow-x: hidden; /* Safety net to prevent horizontal scroll */
+    box-sizing: border-box;
+  }
+
+  .container { /* Assuming global .container for max-width, margin, padding */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem; /* Base padding */
+    box-sizing: border-box;
+  }
+
+  .service-highlights-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column for mobile */
+    gap: 2.5rem;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 992px) { /* Desktop: two columns */
+    .service-highlights-grid {
+      grid-template-columns: 1fr 1fr; /* Text left, image right */
+      gap: 3rem;
+    }
+  }
+
+  .text-content-column, .image-column {
+    box-sizing: border-box;
+    width: 100%; /* Ensure columns take full width of their grid cell */
+  }
+
+  .main-heading {
+    font-size: 2.2rem;
+    color: var(--dark-blue);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+    /* text-transform: uppercase; */
+    position: relative; /* For the underline */
+    display: block; /* Changed to block for easier centering of underline */
+    /* text-align: left; /* Default for desktop */
+  }
+  .main-heading span { /* Wrapper for text to allow underline to be precise */
+    display: inline-block; /* So underline only spans text */
+    position: relative;
+    padding-bottom: 0.75rem; /* Space for underline */
+  }
+  .main-heading span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; /* Default for left-aligned text */
+    width: 60px; /* Length of the underline */
+    height: 4px;  /* Thickness of the underline */
+    background-color: var(--primary-color);
+  }
+
+
+  .description-paragraph {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .highlight-items-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Stack on mobile */
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 576px) { /* Two columns for highlights on small+ screens */
+    .highlight-items-container {
+      grid-template-columns: repeat(2, minmax(0, 1fr)); /* Robust column sizing */
+      gap: 2rem;
+    }
+  }
+   @media (min-width: 992px) { 
+    /* Desktop: highlight items can remain 2 columns or adjust if needed */
+    /* .highlight-items-container {
+      grid-template-columns: 1fr; 
+    } */
+  }
+
+
+  .highlight-item {
+    display: flex;
+    align-items: flex-start; 
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+
+  .highlight-icon-wrapper {
+    flex-shrink: 0;
+  }
+  .highlight-icon {
+    font-size: 2.5rem; 
+    color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb, 41, 164, 240), 0.1); 
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: inline-flex; 
+  }
+
+  .highlight-text {
+    /* Container for title and description */
+  }
+  .highlight-title {
+    font-size: 1.1rem;
+    color: var(--dark-blue);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .highlight-description {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    line-height: 1.6;
+  }
+
+  .btn { 
+    padding: 0.85rem 2rem;
+    border-radius: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+  }
+  .btn-primary { 
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-color: var(--primary-color);
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: var(--text-light);
+  }
+  .service-contact-btn {
+    /* Specific styles if needed for this button */
+  }
+
+  .image-wrapper {
+    position: relative; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    width: 100%; /* Ensure wrapper takes full width of its grid cell */
+    box-sizing: border-box;
+  }
+  .highlight-main-image {
+    width: 100%;
+    height: auto; 
+    max-height: 500px; 
+    object-fit: cover; 
+    display: block;
+  }
+
+  .image-badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: -1.5rem; 
+    background-color: var(--orange-color); 
+    color: var(--text-light);
+    padding: 0.75rem 1rem 0.75rem 2rem; 
+    border-radius: 0 5px 5px 0; 
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1;
+  }
+  .image-badge .badge-text {
+    display: block;
+    font-size: 1.2rem; 
+    font-weight: 700;
+    line-height: 1;
+  }
+  .image-badge .badge-subtext {
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+
+  /* Responsive Adjustments */
+  @media (max-width: 991px) { /* Tablet and below */
+    .image-column {
+      margin-top: 2rem; 
+    }
+    .main-heading {
+      font-size: 1.9rem;
+    }
+  }
+
+  @media (max-width: 767px) { /* Mobile */
+    .service-highlights-section {
+      padding: 3rem 0;
+    }
+    .container {
+      padding: 0 0.75rem; 
+    }
+    .main-heading {
+      font-size: 1.7rem;
+      text-align: center; /* Center heading text on mobile */
+    }
+    .main-heading span::after { /* Center the underline on mobile */
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .description-paragraph {
+      text-align: center;
+      font-size: 0.95rem;
+    }
+    .highlight-items-container {
+      grid-template-columns: 1fr; /* Stack highlights */
+      text-align: center;
+    }
+    .highlight-item {
+      flex-direction: column; /* Stack icon and text */
+      align-items: center;
+    }
+    .highlight-icon-wrapper {
+      margin-bottom: 0.5rem;
+    }
+    .service-contact-btn {
+      display: block; 
+      width: 100%;
+      max-width: 300px;
+      margin: 2.5rem auto 0 auto; /* Added top margin and centered */
+    }
+    .image-badge {
+        left: 1rem; 
+        bottom: 1rem;
+        padding: 0.5rem 0.75rem;
+    }
+    .image-badge .badge-text { font-size: 1rem; }
+    .image-badge .badge-subtext { font-size: 0.7rem; }
+  }
+  @media (max-width: 420px) {
+    .service-highlights-section {
+        padding: 2rem 0; /* Reduce padding further */
+    }
+    .container {
+        padding: 0 0.5rem; /* Tighter padding */
+    }
+    .main-heading {
+        font-size: 1.5rem;
+    }
+    .description-paragraph {
+        font-size: 0.9rem;
+    }
+    .highlight-title {
+        font-size: 1rem;
+    }
+    .highlight-description {
+        font-size: 0.85rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+        padding: 0.75rem 1.5rem;
+    }
+  }
+
+</style>
