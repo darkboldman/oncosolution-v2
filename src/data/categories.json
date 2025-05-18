@@ -1,0 +1,52 @@
+[
+  {
+    "id": "dmx-controllers",
+    "name": "DMX Controllers",
+    "image": "../assets/images/categories/dmx-controllers.jpg", 
+    "isFeatured": true
+  },
+  {
+    "id": "schnieder-c-bus",
+    "name": "Schnieder c-bus Control",
+    "image": "../assets/images/categories/schnieder-c-bus.jpg", 
+    "isFeatured": false
+  },
+  {
+    "id": "philips-dynalite",
+    "name": "Philips Dynalite",
+    "image": "../assets/images/categories/philips-dynalite.jpg", 
+    "isFeatured": true
+  },
+  {
+    "id": "power-supplies",
+    "name": "Power Supplies",
+    "image": "../assets/images/categories/power-supplies.jpg",
+     "isFeatured": true
+  },
+  {
+    "id": "led-alluminium-profiles",
+    "name": "LED Aluminium Profiles",
+    "image": "../assets/images/categories/led-alluminium-profiles.jpg", 
+    "isFeatured": true
+  },
+  {
+    "id": "sensors",
+    "name": "Sensors",
+    "image": "../assets/images/categories/sensors.jpg", 
+    "isFeatured": true
+  },
+  {
+    "id": "emergency-lighting",
+    "name": "Emergency Lighting",
+    "image": "../assets/images/categories/emergency-lighting.jpg",
+     "isFeatured": false
+  },
+  {
+    "id": "led-lighting",
+    "name": "Led Lighting",
+    "image": "../assets/images/categories/led-lighting.jpg", 
+    "isFeatured": true
+  }
+  
+]
+ 
