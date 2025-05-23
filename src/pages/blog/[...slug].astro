@@ -1,0 +1,27 @@
+---
+// src/pages/blog/[...slug].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro'; // Adjust path if your layout is elsewhere
+
+// Define the props this page expects from getStaticPaths
+export interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog', ({ data }) => {
+    // Filter out drafts if you have an isDraft field in your frontmatter
+    return data.isDraft !== true; 
+  });
+
+  return blogEntries.map((entry: CollectionEntry<'blog'>) => ({ // MODIFIED: Explicitly type 'entry'
+    params: { slug: entry.slug }, // Astro derives slug from filename (e.g., my-post.md -> my-post)
+    props: { post: entry },      // Pass the full entry to the page component
+  }));
+}
+
+// The 'post' prop is injected by getStaticPaths
+const { post } = Astro.props as Props; // Added 'as Props' for stronger typing here too
+---
+<BlogPostLayout entry={post} />

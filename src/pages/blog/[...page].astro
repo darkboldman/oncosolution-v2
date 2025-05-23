@@ -1,0 +1,175 @@
+---
+// src/pages/blog/index.astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro'; 
+import BlogCard from '../../components/BlogCard.astro';   
+import Pagination from '../../components/Pagination.astro'; 
+import type { Page, PaginateFunction } from 'astro';    
+
+// Replace your getStaticPaths function with this debugged version:
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  console.log("[blog/index.astro] getStaticPaths: Starting...");
+  
+  try {
+    // First, let's check if we can get the collection at all
+    const allBlogPosts = await getCollection('blog');
+    console.log(`[blog/index.astro] Raw collection length: ${allBlogPosts.length}`);
+    console.log("[blog/index.astro] First few posts:", allBlogPosts.slice(0, 3).map(p => ({
+      slug: p.slug,
+      isDraft: p.data.isDraft,
+      publishDate: p.data.publishDate
+    })));
+
+    // Apply the draft filter
+    const publishedPosts = allBlogPosts.filter((entry: CollectionEntry<'blog'>) => {
+      const isNotDraft = !entry.data.isDraft;
+      console.log(`[blog/index.astro] Post "${entry.slug}" - isDraft: ${entry.data.isDraft}, including: ${isNotDraft}`);
+      return isNotDraft;
+    });
+    
+    console.log(`[blog/index.astro] After draft filter: ${publishedPosts.length} posts`);
+
+    if (publishedPosts.length === 0) {
+      console.warn("[blog/index.astro] No published posts found! Creating empty pagination...");
+      // Still need to return pagination result even with empty array
+      return paginate([], { pageSize: 6 });
+    }
+
+    // Sort posts by publish date
+    const sortedPosts = publishedPosts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
+      const dateA = a.data.publishDate ? new Date(a.data.publishDate).valueOf() : 0;
+      const dateB = b.data.publishDate ? new Date(b.data.publishDate).valueOf() : 0;
+      console.log(`[blog/index.astro] Sorting: ${a.slug} (${dateA}) vs ${b.slug} (${dateB})`);
+      return dateB - dateA;
+    });
+
+    console.log(`[blog/index.astro] Final sorted posts: ${sortedPosts.length}`);
+    console.log("[blog/index.astro] Post order:", sortedPosts.map(p => p.slug));
+
+    // Create pagination
+    const paginationResult = paginate(sortedPosts, { pageSize: 6 });
+    console.log(`[blog/index.astro] Pagination created ${paginationResult.length} pages`);
+    console.log("[blog/index.astro] Pagination paths:", paginationResult.map(p => p.params));
+
+    return paginationResult;
+
+  } catch (error) {
+    console.error("[blog/index.astro] Error in getStaticPaths:", error);
+    // Return empty pagination as fallback
+    return paginate([], { pageSize: 6 });
+  }
+}
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>; 
+}
+const { page } = Astro.props as Props; 
+
+if (!page) {
+  console.error(`[blog/index.astro] CRITICAL: 'page' prop is undefined for Astro.props:`, JSON.stringify(Astro.props));
+}
+
+const pageTitle = "Our Blog & Knowledge Base";
+const pageDescription = "Explore articles, insights, and updates from Onco Solutions on lighting, automation, and more.";
+
+const currentPage = page?.currentPage ?? 1;
+const postsToDisplay = page?.data ?? [];
+const lastPage = page?.lastPage ?? 1; 
+
+const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${page.currentPage}` : pageTitle;
+---
+<BaseLayout title={currentPageTitle} description={pageDescription}>
+  <div class="blog-index-container container">
+    <header class="blog-header">
+      <h1 class="page-main-title"><span>{pageTitle}</span></h1>
+      {currentPage === 1 && (
+        <p class="blog-intro">
+          Discover insights, tips, and updates on smart lighting, automation, 
+          and innovative solutions from the Onco Solutions team.
+        </p>
+      )}
+    </header>
+
+    {postsToDisplay.length > 0 ? (
+      <div class="blog-posts-grid">
+        {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    ) : (
+      <p class="no-posts-message">No blog posts found. Check back soon!</p>
+    )}
+
+    {page && lastPage > 1 && <Pagination page={page} />}
+  </div>
+</BaseLayout>
+
+<style>
+  /* Ensure your global CSS (imported in BaseLayout) has your color variables */
+  .blog-index-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    box-sizing: border-box; /* Helps prevent overflow */
+  }
+
+  .blog-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-main-title {
+    margin-bottom: 1rem;
+    color: var(--dark-blue);
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    display: block; 
+  }
+  .page-main-title span {
+    display: inline-block; 
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .page-main-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--primary-color);
+  }
+
+  .blog-intro {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+    line-height: 1.6;
+  }
+
+  .blog-posts-grid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 2rem; 
+  }
+
+  @media (min-width: 640px) { 
+    .blog-posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 992px) { 
+    .blog-posts-grid {
+      grid-template-columns: repeat(3, 1fr); 
+    }
+  }
+  .no-posts-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    padding: 2rem 0;
+  }
+</style>

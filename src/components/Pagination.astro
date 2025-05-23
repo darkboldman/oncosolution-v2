@@ -1,0 +1,146 @@
+---
+// src/components/Pagination.astro
+import type { Page } from 'astro';
+
+interface Props {
+  page: Page<any>;
+}
+
+const { page } = Astro.props;
+
+// Helper function to generate correct URLs
+function getPageUrl(pageNum: number): string {
+  if (pageNum === 1) {
+    return '/blog'; // First page should be /blog, not /blog/1
+  }
+  return `/blog/${pageNum}`; // Other pages: /blog/2, /blog/3, etc.
+}
+
+// Generate page numbers to show
+const generatePageNumbers = () => {
+  const current = page.currentPage;
+  const total = page.lastPage;
+  const pages: number[] = [];
+  
+  // Always show first page
+  pages.push(1);
+  
+  // Show pages around current page
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+    if (!pages.includes(i)) pages.push(i);
+  }
+  
+  // Always show last page if more than 1 page
+  if (total > 1 && !pages.includes(total)) {
+    pages.push(total);
+  }
+  
+  return pages.sort((a, b) => a - b);
+};
+
+const pageNumbers = generatePageNumbers();
+---
+
+<nav class="pagination" aria-label="Blog pagination">
+  <div class="pagination-container">
+    <!-- Previous Button -->
+    {page.url.prev && (
+      <a href={page.url.prev} class="pagination-btn pagination-prev" aria-label="Go to previous page">
+        ← Previous
+      </a>
+    )}
+    
+    <!-- Page Numbers -->
+    <div class="pagination-numbers">
+      {pageNumbers.map((pageNum) => (
+        <a 
+          href={getPageUrl(pageNum)}
+          class={`pagination-number ${pageNum === page.currentPage ? 'active' : ''}`}
+          aria-label={`Go to page ${pageNum}`}
+          aria-current={pageNum === page.currentPage ? 'page' : undefined}
+        >
+          {pageNum}
+        </a>
+      ))}
+    </div>
+    
+    <!-- Next Button -->
+    {page.url.next && (
+      <a href={page.url.next} class="pagination-btn pagination-next" aria-label="Go to next page">
+        Next →
+      </a>
+    )}
+  </div>
+  
+  <!-- Page Info -->
+  <div class="pagination-info">
+    <span>
+      Page {page.currentPage} of {page.lastPage} 
+      ({page.total} total posts)
+    </span>
+  </div>
+</nav>
+
+<style>
+  .pagination {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-btn,
+  .pagination-number {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    color: var(--text-color, #333);
+    background-color: var(--bg-color, #fff);
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+  
+  .pagination-btn:hover,
+  .pagination-number:hover {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    border-color: var(--primary-color, #007bff);
+  }
+  
+  .pagination-number.active {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    border-color: var(--primary-color, #007bff);
+    cursor: default;
+  }
+  
+  .pagination-numbers {
+    display: flex;
+    gap: 0.25rem;
+  }
+  
+  .pagination-info {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary-color, #666);
+  }
+  
+  @media (max-width: 640px) {
+    .pagination-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .pagination-numbers {
+      order: -1;
+    }
+  }
+</style>
