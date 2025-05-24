@@ -1,50 +1,208 @@
 ---
+// src/pages/products/[...page].astro
+import type { ImageMetadata } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCategoryFilterBar from '../../components/ProductCategoryFilterBar.astro';
-// ... other imports for products, pagination, etc.
+// MODIFIED: Import Product interface from ProductCard
+import ProductCard, { type Product as ProductCardType } from '../../components/ProductCard.astro'; 
+import Pagination from '../../components/Pagination.astro';   
+import categoriesDataJson from '../../data/categories.json';
 
-// Determine currentCategorySlug from Astro.params or other logic
-const currentCategorySlug = Astro.params.categorySlug || "all"; 
-// (This depends on how your product page routes are structured)
+import type { Page, PaginateFunction } from 'astro';
+
+// Use the Product type imported from ProductCard.astro
+// This ensures consistency. We'll call it ProductInPage to avoid naming conflicts if needed,
+// but using ProductCardType directly is cleaner.
+type Product = ProductCardType; // Alias the imported type
+
+// --- Image Handling ---
+const allProductImageAssets = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/products/**/*.{jpeg,jpg,png,webp,gif,svg}', 
+  { eager: true }
+);
+
+const productImageMetaMap = new Map<string, ImageMetadata>();
+for (const path in allProductImageAssets) {
+  const filename = path.split('/').pop(); 
+  if (filename) {
+    productImageMetaMap.set(filename, allProductImageAssets[path].default);
+  }
+}
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  let allProducts: Product[] = []; // Use the imported/aliased Product type
+
+  for (const category of categoriesDataJson) {
+    try {
+      const productFilePath = `../../data/products/${category.id}.json`;
+      // Ensure the dynamic import path is treated as a literal by Vite/Astro
+      // The /* @vite-ignore */ comment helps if there are issues with Vite's analysis.
+      const categoryProductsModule = await import(productFilePath /* @vite-ignore */);
+      // JSON files might be imported as .default or directly as the object/array
+      const productsInCategoryRaw: any[] = categoryProductsModule.default || categoryProductsModule;
+
+      productsInCategoryRaw.forEach(p_raw => {
+        // Cast to a base type that matches JSON structure before full processing
+        const p = p_raw as {
+          id: string;
+          category?: string;
+          name: string;
+          shortDescription?: string;
+          featured?: "yes" | "no";
+          images: string[];
+          slug?: string;
+          // include other fields from your product JSON files
+        };
+
+        let imageMeta: ImageMetadata | undefined = undefined;
+        const firstImageFilename = p.images && p.images.length > 0 ? p.images[0].split('/').pop() : undefined;
+        
+        if (firstImageFilename && productImageMetaMap.has(firstImageFilename)) {
+          imageMeta = productImageMetaMap.get(firstImageFilename);
+        } else if (firstImageFilename) {
+          // console.warn(`[Products Page] Image for product "${p.name}" (${firstImageFilename}) not found in globbed assets.`);
+        }
+
+        allProducts.push({
+          ...p, // Spread all properties from p
+          id: p.id, // Ensure required fields are explicitly set if not covered by spread
+          name: p.name,
+          images: p.images,
+          featured: p.featured || "no", // Provide default if optional
+          slug: p.slug || p.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+          imageMeta: imageMeta,
+          categoryName: category.name 
+        } as Product); // Cast the final object to the Product type
+      });
+    } catch (e: unknown) { // MODIFIED: Catch 'e' as unknown
+      let errorMessage = `Warning: Could not load products for category "${category.name}" from "src/data/products/${category.id}.json". File may be missing or invalid.`;
+      if (e instanceof Error) {
+        errorMessage += ` Details: ${e.message}`;
+      } else {
+        errorMessage += ` Details: ${String(e)}`;
+      }
+      console.warn(errorMessage);
+    }
+  }
+
+  const sortedProducts = allProducts.sort((a, b) => {
+    if (a.featured === "yes" && b.featured !== "yes") return -1;
+    if (a.featured !== "yes" && b.featured === "yes") return 1;
+    // Ensure name exists for localeCompare, though schema should enforce it
+    return (a.name || "").localeCompare(b.name || ""); 
+  });
+
+  console.log(`[products/[...page].astro] Total products for "All Products" view: ${sortedProducts.length}`);
+  return paginate(sortedProducts, { 
+    pageSize: 12,
+  });
+}
+
+interface PropsPage {
+  page: Page<Product>; // Use the imported/aliased Product type
+}
+const { page } = Astro.props as PropsPage;
+
+const pageTitle = "Our Products";
+const pageDescription = "Browse our extensive range of lighting and automation solutions.";
+const currentPageTitle = page.currentPage > 1 ? `${pageTitle} - Page ${page.currentPage}` : pageTitle;
 ---
-<BaseLayout title="Our Products">
-  <header class="products-page-main-header">
-    <div class="container">
-      <h1 class="page-main-title"><span>Our Products</span></h1>
-      <p class="page-intro-p">Browse our extensive range of lighting and automation solutions.</p>
+
+<BaseLayout title={currentPageTitle} description={pageDescription}>
+  <div class="products-page-container">
+    <header class="products-page-header">
+      <div class="container">
+        <h1 class="page-main-title"><span>{pageTitle}</span></h1>
+        {page.currentPage === 1 && (
+          <p class="page-intro-p">
+            Explore our comprehensive collection. Use the filters below to find specific categories.
+          </p>
+        )}
+      </div>
+    </header>
+
+    <ProductCategoryFilterBar currentFilterId="all" />
+
+    <div class="container products-main-content">
+      {page.data.length > 0 ? (
+        <div class="products-grid-layout">
+          {page.data.map(product => ( // product here is now correctly typed as Product
+            <ProductCard product={product} />
+          ))}
+        </div>
+      ) : (
+        <p class="no-products-message">No products found. Please check back later or try a different category.</p>
+      )}
+
+      <Pagination page={page} base="/products" /> {/* MODIFIED: base path for "All Products" pagination */}
     </div>
-  </header>
-
-  <ProductCategoryFilterBar currentFilterId={currentCategorySlug} />
-
-  <div class="container product-grid-area">
-    {/* Your product cards and pagination will go here */}
   </div>
 </BaseLayout>
 
 <style>
-  /* Styles for the products page header */
-  .products-page-main-header {
-    background-color: var(--dark-blue); /* Example */
+  /* Styles from your ProjectsPortfolio.astro, adapted for products */
+  .products-page-container {
+    /* Main wrapper */
+  }
+  .products-page-header {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%);
     color: var(--text-light);
-    padding: 2rem 1rem 1.5rem;
+    padding: 3rem 1rem 2.5rem;
     text-align: center;
-    /* margin-bottom: 0; /* Filter bar might sit directly below */
+    margin-bottom: 0; 
   }
   .page-main-title {
     color: var(--text-light);
-    font-size: 2.5rem;
+    font-size: 2.8rem; 
     font-weight: 700;
     margin-bottom: 0.75rem;
-    /* ... other title styles ... */
+  }
+  .page-main-title span {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .page-main-title span::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 4px;
+    background-color: var(--gold-color); 
   }
   .page-intro-p {
     font-size: 1.1rem;
     opacity: 0.9;
     max-width: 650px;
     margin: 0 auto;
+    line-height: 1.6;
   }
-  .product-grid-area {
-    padding-top: 2rem;
+  .products-main-content.container {
+    padding-top: 2rem; 
+    padding-bottom: 2rem;
+  }
+  .products-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (min-width: 640px) { 
+    .products-grid-layout {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 992px) { 
+    .products-grid-layout {
+      grid-template-columns: repeat(3, 1fr); 
+    }
+  }
+  .no-products-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    padding: 3rem 0;
   }
 </style>
