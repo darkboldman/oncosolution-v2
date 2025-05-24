@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCategoryFilterBar from '../../components/ProductCategoryFilterBar.astro';
+// ... other imports for products, pagination, etc.
+
+// Determine currentCategorySlug from Astro.params or other logic
+const currentCategorySlug = Astro.params.categorySlug || "all"; 
+// (This depends on how your product page routes are structured)
+---
+<BaseLayout title="Our Products">
+  <header class="products-page-main-header">
+    <div class="container">
+      <h1 class="page-main-title"><span>Our Products</span></h1>
+      <p class="page-intro-p">Browse our extensive range of lighting and automation solutions.</p>
+    </div>
+  </header>
+
+  <ProductCategoryFilterBar currentFilterId={currentCategorySlug} />
+
+  <div class="container product-grid-area">
+    {/* Your product cards and pagination will go here */}
+  </div>
+</BaseLayout>
+
+<style>
+  /* Styles for the products page header */
+  .products-page-main-header {
+    background-color: var(--dark-blue); /* Example */
+    color: var(--text-light);
+    padding: 2rem 1rem 1.5rem;
+    text-align: center;
+    /* margin-bottom: 0; /* Filter bar might sit directly below */
+  }
+  .page-main-title {
+    color: var(--text-light);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    /* ... other title styles ... */
+  }
+  .page-intro-p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  .product-grid-area {
+    padding-top: 2rem;
+  }
+</style>
