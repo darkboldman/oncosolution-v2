@@ -1,6 +1,6 @@
 ---
 // src/pages/projects/[...page].astro
-// import { Image } from 'astro:assets'; // Not directly used here, but ProjectCard uses it
+// import { Image } from 'astro:assets'; 
 import type { ImageMetadata } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
@@ -16,7 +16,7 @@ interface ProjectJson {
   description: string;
   clientUrl?: string;
   location: string;
-  imageUrl: string; // Path like "/assets/images/projects/xyz.jpg" or "xyz.jpg"
+  imageUrl: string; 
   slug: string;
 }
 
@@ -25,15 +25,11 @@ interface Project extends ProjectJson {
 }
 
 export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
-  // --- DATA PROCESSING LOGIC NOW FULLY INSIDE getStaticPaths ---
-
-  // 1. Use import.meta.glob to get all project images from src/assets/images/projects/
   const allProjectImageAssetModules = import.meta.glob<{ default: ImageMetadata }>(
     '/src/assets/images/projects/**/*.{jpeg,jpg,png,webp,gif,svg}', 
     { eager: true }
   );
 
-  // 2. Create a map for quick lookup: original filename (e.g., "xyz.jpg") -> ImageMetadata
   const imageMetaMap = new Map<string, ImageMetadata>();
   for (const importPath in allProjectImageAssetModules) {
     const module = allProjectImageAssetModules[importPath];
@@ -42,20 +38,16 @@ export async function getStaticPaths({ paginate }: { paginate: PaginateFunction 
       imageMetaMap.set(filename, module.default);
     }
   }
-  // console.log('[projects page] Image Meta Map created. Keys:', Array.from(imageMetaMap.keys()));
 
-  // 3. Process projectsDataJson: add imageMeta and ensure slug
   const processedProjects: Project[] = projectsDataJson.map((projectItem: any) => {
     const projectTyped = projectItem as ProjectJson; 
     let imageMeta: ImageMetadata | undefined = undefined;
-    
-    // Extract the filename from the project's imageUrl string in JSON
     const filenameFromJson = projectTyped.imageUrl.split('/').pop();
 
     if (filenameFromJson && imageMetaMap.has(filenameFromJson)) {
       imageMeta = imageMetaMap.get(filenameFromJson);
     } else if (filenameFromJson) {
-      // console.warn(`[projects] No image asset found in map for: "${filenameFromJson}" (from project: ${projectTyped.name}). ProjectCard will use direct src path from JSON.`);
+      // console.warn(`[projects] No image asset found for: "${filenameFromJson}" (project: ${projectTyped.name}).`);
     }
 
     return {
@@ -65,21 +57,19 @@ export async function getStaticPaths({ paginate }: { paginate: PaginateFunction 
     };
   });
 
-  // 4. Sort projects: featured first, then by year (newest), then by name
   const sortedProjects = processedProjects.sort((a, b) => {
     if (a.featured === "yes" && b.featured !== "yes") return -1;
     if (a.featured !== "yes" && b.featured === "yes") return 1;
     if (a.year !== b.year) return b.year - a.year; 
     return a.name.localeCompare(b.name); 
   });
-  // --- END OF DATA PROCESSING LOGIC ---
 
   console.log(`[projects/[...page].astro] Total processed projects for pagination: ${sortedProjects.length}`);
   if (sortedProjects.length === 0) {
     console.warn("[projects/[...page].astro] No projects to paginate.");
   }
   return paginate(sortedProjects, { 
-    pageSize: 12,
+    pageSize: 12, // MODIFIED: Set to 12 projects per page
   });
 }
 
@@ -123,7 +113,6 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
 </BaseLayout>
 
 <style>
-  /* Styles from previous version are assumed here */
   .projects-listing-page-container {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -164,25 +153,27 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
   }
   .projects-grid-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    grid-template-columns: 1fr; 
     gap: 2rem;
     margin-bottom: 2.5rem; 
   }
-  @media (min-width: 768px) {
+
+  @media (min-width: 640px) { 
     .projects-grid-layout {
       grid-template-columns: repeat(2, 1fr);
     }
   }
   @media (min-width: 992px) { 
     .projects-grid-layout {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); /* This will display 3 cards in a row */
     }
   }
-  @media (min-width: 1200px) {
+  /* If you had a 4-column layout for 1200px, it's removed to stick to max 3 per row */
+  /* @media (min-width: 1200px) {
     .projects-grid-layout {
       grid-template-columns: repeat(4, 1fr); 
     }
-  }
+  } */
   .no-projects-message {
     text-align: center;
     font-size: 1.1rem;

@@ -4,7 +4,7 @@
     --primary-hover: #0056b3;
     --header-light-h1: #01245c;
     --dark-blue: #01245c;
-    --dark-blue-rgb: rgb(1, 36, 92); 
+    --dark-blue-rgb: 1, 36, 92; 
     --accent-color: #4caf50;
     --secondary-color: #6c757d;
     --light-bg: #f8f9fa;
@@ -22,6 +22,8 @@
     --font-family-montserrat: "Montserrat", sans-serif;
     --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    /* Border radius */
+    --border-radius: 5px;
 }
 
 body {

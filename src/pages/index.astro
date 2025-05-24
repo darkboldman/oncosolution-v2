@@ -6,19 +6,22 @@ import WhatWeDo from '../components/WhatWeDo.astro';
 import ProjectHighlights from '../components/ProjectHighlights.astro';
 import ServiceHighlights from '../components/ServiceHighlights.astro';
 import ClientLogos from '../components/ClientLogos.astro';
+import ProductCategoryTiles from '../components/ProductCategoryTiles.astro';
+import ProductCategoryFilterBar from '../components/ProductCategoryFilterBar.astro';
 
 // Import other components you'll use on this page
 
 // import FeaturesSection from '../components/FeaturesSection.astro';
 ---
 <BaseLayout title="Home - Onco Solutions" description="Welcome to Onco Solutions Home Page">
-   <HeroSlider /> 
+   <HeroSlider />
+   <ProductCategoryFilterBar /> 
    <WhatWeDo />
    <ProjectHighlights />
    <ClientLogos />
    <ServiceHighlights />
+   <ProductCategoryTiles />
    
-
 </BaseLayout>
 
 <style>
