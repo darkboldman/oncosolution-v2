@@ -1,73 +1,62 @@
 ---
-// src/pages/blog/index.astro
+// src/pages/blog/[...page].astro
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro'; 
 import BlogCard from '../../components/BlogCard.astro';   
 import Pagination from '../../components/Pagination.astro'; 
-import type { Page, PaginateFunction } from 'astro';    
+import type { Page, PaginateFunction, GetStaticPathsResult } from 'astro'; // Added GetStaticPathsResult for typing 'p'
 
-// Replace your getStaticPaths function with this debugged version:
+// Define the props for each generated page route by paginate
+interface PaginatedBlogRouteProps {
+  page: Page<CollectionEntry<'blog'>>;
+}
+// Define the structure of an individual item in the array returned by paginate
+type PaginateResultItem = {
+  params: { page: string | undefined }; // Or Record<string, string | undefined> if page param name differs
+  props: PaginatedBlogRouteProps;
+};
+
 
 export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
-  console.log("[blog/index.astro] getStaticPaths: Starting...");
+  console.log("[blog/[...page].astro] getStaticPaths: Fetching blog collection...");
+  const allBlogPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
+    return entry.data.isDraft !== true; 
+  });
+  console.log(`[blog/[...page].astro] getStaticPaths: Found ${allBlogPosts.length} raw entries from getCollection (after draft filter).`);
+
+  const sortedPosts = allBlogPosts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
+    const dateA = a.data.publishDate ? new Date(a.data.publishDate).valueOf() : 0;
+    const dateB = b.data.publishDate ? new Date(b.data.publishDate).valueOf() : 0;
+    return dateB - dateA;
+  });
   
-  try {
-    // First, let's check if we can get the collection at all
-    const allBlogPosts = await getCollection('blog');
-    console.log(`[blog/index.astro] Raw collection length: ${allBlogPosts.length}`);
-    console.log("[blog/index.astro] First few posts:", allBlogPosts.slice(0, 3).map(p => ({
-      slug: p.slug,
-      isDraft: p.data.isDraft,
-      publishDate: p.data.publishDate
-    })));
-
-    // Apply the draft filter
-    const publishedPosts = allBlogPosts.filter((entry: CollectionEntry<'blog'>) => {
-      const isNotDraft = !entry.data.isDraft;
-      console.log(`[blog/index.astro] Post "${entry.slug}" - isDraft: ${entry.data.isDraft}, including: ${isNotDraft}`);
-      return isNotDraft;
-    });
-    
-    console.log(`[blog/index.astro] After draft filter: ${publishedPosts.length} posts`);
-
-    if (publishedPosts.length === 0) {
-      console.warn("[blog/index.astro] No published posts found! Creating empty pagination...");
-      // Still need to return pagination result even with empty array
-      return paginate([], { pageSize: 6 });
-    }
-
-    // Sort posts by publish date
-    const sortedPosts = publishedPosts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
-      const dateA = a.data.publishDate ? new Date(a.data.publishDate).valueOf() : 0;
-      const dateB = b.data.publishDate ? new Date(b.data.publishDate).valueOf() : 0;
-      console.log(`[blog/index.astro] Sorting: ${a.slug} (${dateA}) vs ${b.slug} (${dateB})`);
-      return dateB - dateA;
-    });
-
-    console.log(`[blog/index.astro] Final sorted posts: ${sortedPosts.length}`);
-    console.log("[blog/index.astro] Post order:", sortedPosts.map(p => p.slug));
-
-    // Create pagination
-    const paginationResult = paginate(sortedPosts, { pageSize: 6 });
-    console.log(`[blog/index.astro] Pagination created ${paginationResult.length} pages`);
-    console.log("[blog/index.astro] Pagination paths:", paginationResult.map(p => p.params));
-
-    return paginationResult;
-
-  } catch (error) {
-    console.error("[blog/index.astro] Error in getStaticPaths:", error);
-    // Return empty pagination as fallback
-    return paginate([], { pageSize: 6 });
+  console.log(`[blog/[...page].astro] getStaticPaths: Found ${sortedPosts.length} non-draft blog posts to paginate.`);
+  if (sortedPosts.length === 0) {
+    console.warn("[blog/[...page].astro] getStaticPaths: No publishable blog posts found. Paginate will be called with an empty array. This might lead to an empty blog index page.");
   }
+  
+  const paginationResult = paginate(sortedPosts, { pageSize: 6 }); 
+  
+  console.log("[blog/[...page].astro] getStaticPaths: Pagination result (paths to be generated):", JSON.stringify(
+    // MODIFIED: Explicitly type 'p' here
+    paginationResult.map((p: PaginateResultItem) => ({ 
+        params: p.params, 
+        propsKeys: p.props ? Object.keys(p.props) : [] // Guard against p.props being null/undefined
+    })), 
+    null, 
+    2
+  ));
+  return paginationResult;
 }
 
+// Props for the page component itself
 interface Props {
   page: Page<CollectionEntry<'blog'>>; 
 }
 const { page } = Astro.props as Props; 
 
 if (!page) {
-  console.error(`[blog/index.astro] CRITICAL: 'page' prop is undefined for Astro.props:`, JSON.stringify(Astro.props));
+  console.error(`[blog/[...page].astro] CRITICAL: 'page' prop is undefined for Astro.props:`, JSON.stringify(Astro.props));
 }
 
 const pageTitle = "Our Blog & Knowledge Base";
@@ -93,7 +82,7 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
 
     {postsToDisplay.length > 0 ? (
       <div class="blog-posts-grid">
-        {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+        {postsToDisplay.map((post: CollectionEntry<'blog'>) => ( // This was already correctly typed
           <BlogCard post={post} />
         ))}
       </div>
@@ -101,16 +90,16 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
       <p class="no-posts-message">No blog posts found. Check back soon!</p>
     )}
 
-    {page && lastPage > 1 && <Pagination page={page} />}
+    {page && lastPage > 1 && <Pagination page={page} base="/blog" />}
   </div>
 </BaseLayout>
 
 <style>
-  /* Ensure your global CSS (imported in BaseLayout) has your color variables */
+  /* Styles from previous version are assumed here */
   .blog-index-container {
     padding-top: 2rem;
     padding-bottom: 2rem;
-    box-sizing: border-box; /* Helps prevent overflow */
+    box-sizing: border-box; 
   }
 
   .blog-header {

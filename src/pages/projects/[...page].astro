@@ -1,0 +1,192 @@
+---
+// src/pages/projects/[...page].astro
+// import { Image } from 'astro:assets'; // Not directly used here, but ProjectCard uses it
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Pagination from '../../components/Pagination.astro'; 
+import projectsDataJson from '../../data/projects.json'; 
+import type { Page, PaginateFunction } from 'astro';
+
+interface ProjectJson {
+  name: string;
+  featured: "yes" | "no";
+  year: number;
+  scope: string;
+  description: string;
+  clientUrl?: string;
+  location: string;
+  imageUrl: string; // Path like "/assets/images/projects/xyz.jpg" or "xyz.jpg"
+  slug: string;
+}
+
+interface Project extends ProjectJson {
+  imageMeta?: ImageMetadata;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  // --- DATA PROCESSING LOGIC NOW FULLY INSIDE getStaticPaths ---
+
+  // 1. Use import.meta.glob to get all project images from src/assets/images/projects/
+  const allProjectImageAssetModules = import.meta.glob<{ default: ImageMetadata }>(
+    '/src/assets/images/projects/**/*.{jpeg,jpg,png,webp,gif,svg}', 
+    { eager: true }
+  );
+
+  // 2. Create a map for quick lookup: original filename (e.g., "xyz.jpg") -> ImageMetadata
+  const imageMetaMap = new Map<string, ImageMetadata>();
+  for (const importPath in allProjectImageAssetModules) {
+    const module = allProjectImageAssetModules[importPath];
+    const filename = importPath.split('/').pop(); 
+    if (filename) {
+      imageMetaMap.set(filename, module.default);
+    }
+  }
+  // console.log('[projects page] Image Meta Map created. Keys:', Array.from(imageMetaMap.keys()));
+
+  // 3. Process projectsDataJson: add imageMeta and ensure slug
+  const processedProjects: Project[] = projectsDataJson.map((projectItem: any) => {
+    const projectTyped = projectItem as ProjectJson; 
+    let imageMeta: ImageMetadata | undefined = undefined;
+    
+    // Extract the filename from the project's imageUrl string in JSON
+    const filenameFromJson = projectTyped.imageUrl.split('/').pop();
+
+    if (filenameFromJson && imageMetaMap.has(filenameFromJson)) {
+      imageMeta = imageMetaMap.get(filenameFromJson);
+    } else if (filenameFromJson) {
+      // console.warn(`[projects] No image asset found in map for: "${filenameFromJson}" (from project: ${projectTyped.name}). ProjectCard will use direct src path from JSON.`);
+    }
+
+    return {
+      ...projectTyped,
+      imageMeta: imageMeta, 
+      slug: projectTyped.slug || projectTyped.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+    };
+  });
+
+  // 4. Sort projects: featured first, then by year (newest), then by name
+  const sortedProjects = processedProjects.sort((a, b) => {
+    if (a.featured === "yes" && b.featured !== "yes") return -1;
+    if (a.featured !== "yes" && b.featured === "yes") return 1;
+    if (a.year !== b.year) return b.year - a.year; 
+    return a.name.localeCompare(b.name); 
+  });
+  // --- END OF DATA PROCESSING LOGIC ---
+
+  console.log(`[projects/[...page].astro] Total processed projects for pagination: ${sortedProjects.length}`);
+  if (sortedProjects.length === 0) {
+    console.warn("[projects/[...page].astro] No projects to paginate.");
+  }
+  return paginate(sortedProjects, { 
+    pageSize: 12,
+  });
+}
+
+interface PropsPage {
+  page: Page<Project>; 
+}
+const { page } = Astro.props as PropsPage;
+
+const pageTitle = "Our Projects";
+const pageDescription = "Explore a showcase of our lighting and automation projects.";
+
+const currentPage = page?.currentPage ?? 1;
+const projectsToDisplay = page?.data ?? [];
+const lastPage = page?.lastPage ?? 1; 
+const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${page.currentPage}` : pageTitle;
+---
+
+<BaseLayout title={currentPageTitle} description={pageDescription}>
+  <div class="projects-listing-page-container container">
+    <header class="projects-header">
+      <h1 class="page-main-title"><span>{pageTitle}</span></h1>
+      {currentPage === 1 && (
+        <p class="projects-intro">
+          Discover the innovative solutions and successful implementations by Onco Solutions.
+        </p>
+      )}
+    </header>
+
+    {projectsToDisplay.length > 0 ? (
+      <div class="projects-grid-layout">
+        {projectsToDisplay.map(project => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    ) : (
+      <p class="no-projects-message">No projects found. Please check back later.</p>
+    )}
+
+    {page && lastPage > 1 && <Pagination page={page} base="/projects" />}
+  </div>
+</BaseLayout>
+
+<style>
+  /* Styles from previous version are assumed here */
+  .projects-listing-page-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  .projects-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .page-main-title {
+    margin-bottom: 1rem;
+    color: var(--dark-blue);
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    display: block;
+  }
+  .page-main-title span {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  .page-main-title span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--primary-color);
+  }
+  .projects-intro {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+    line-height: 1.6;
+  }
+  .projects-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 2rem;
+    margin-bottom: 2.5rem; 
+  }
+  @media (min-width: 768px) {
+    .projects-grid-layout {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 992px) { 
+    .projects-grid-layout {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1200px) {
+    .projects-grid-layout {
+      grid-template-columns: repeat(4, 1fr); 
+    }
+  }
+  .no-projects-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    padding: 3rem 0;
+  }
+</style>

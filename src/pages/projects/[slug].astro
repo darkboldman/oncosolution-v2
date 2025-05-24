@@ -1,0 +1,303 @@
+---
+// src/pages/projects/[slug].astro
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import projectsDataJson from '../../data/projects.json'; 
+
+interface ProjectJson {
+  name: string;
+  featured: "yes" | "no";
+  year: number;
+  scope: string;
+  description: string;
+  clientUrl?: string;
+  location: string;
+  imageUrl: string; 
+  slug: string;
+}
+
+interface Project extends ProjectJson {
+  imageMeta?: ImageMetadata; 
+}
+
+export async function getStaticPaths() {
+  // --- MOVED IMAGE PROCESSING LOGIC INSIDE getStaticPaths ---
+  const allProjectImageAssetModules = import.meta.glob<{ default: ImageMetadata }>(
+    '/src/assets/images/projects/**/*.{jpeg,jpg,png,webp,gif,svg}', 
+    { eager: true }
+  );
+
+  const imageMetaMap = new Map<string, ImageMetadata>();
+  for (const importPath in allProjectImageAssetModules) {
+    const module = allProjectImageAssetModules[importPath];
+    const filename = importPath.split('/').pop(); 
+    if (filename) {
+      imageMetaMap.set(filename, module.default);
+    }
+  }
+  // console.log('[projects/[slug].astro] Image Meta Map created. Keys:', Array.from(imageMetaMap.keys()));
+
+  const paths = projectsDataJson.map((projectItem: any) => {
+    const projectTyped = projectItem as ProjectJson;
+    let imageMeta: ImageMetadata | undefined = undefined;
+    
+    const filenameFromJson = projectTyped.imageUrl.split('/').pop();
+    if (filenameFromJson && imageMetaMap.has(filenameFromJson)) {
+      imageMeta = imageMetaMap.get(filenameFromJson);
+    } else if (filenameFromJson) {
+      // console.warn(`[project/${projectTyped.slug}] No image asset found in map for: "${filenameFromJson}". Card will use direct src path from JSON for <img> fallback.`);
+    }
+
+    const projectWithMeta: Project = {
+      ...projectTyped,
+      imageMeta: imageMeta,
+      slug: projectTyped.slug || projectTyped.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
+    };
+
+    return {
+      params: { slug: projectWithMeta.slug },
+      props: { project: projectWithMeta },
+    };
+  });
+  // console.log('[projects/[slug].astro] Generated paths:', JSON.stringify(paths.map(p => p.params), null, 2));
+  return paths;
+}
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+const pageTitle = `${project.name} | Our Projects`;
+const pageDescription = project.description.substring(0, 160) + '...'; 
+
+const imageToDisplay = project.imageMeta || project.imageUrl;
+const imageAltText = project.name ? `${project.name} project image` : "Project image";
+---
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="project-detail-page">
+    <header class="project-detail-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><span aria-hidden="true">&rsaquo;</span><a href="/projects">Projects</a></li>
+            <li><span aria-hidden="true">&rsaquo;</span><span aria-current="page">{project.name}</span></li>
+          </ol>
+        </nav>
+        {project.featured === 'yes' && <div class="featured-project-badge">Featured Project</div>}
+        <h1 class="project-main-title">{project.name}</h1>
+        <div class="project-header-meta">
+          <span class="meta-item year"><strong>Year:</strong> {project.year}</span>
+          <span class="meta-item location"><strong>Location:</strong> {project.location}</span>
+          <span class="meta-item scope"><strong>Scope:</strong> {project.scope}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container project-body-content">
+      <div class="project-main-image-wrapper">
+        {imageToDisplay ? (
+          typeof imageToDisplay === 'string' ? (
+            <img src={imageToDisplay} alt={imageAltText} class="project-main-image" loading="lazy" decoding="async" />
+          ) : (
+            <Image 
+              src={imageToDisplay} 
+              alt={imageAltText} 
+              class="project-main-image"
+              widths={[400, 800, 1200]}
+              sizes="(max-width: 768px) 100vw, 800px"
+              format="webp"
+              quality={80}
+              loading="eager"
+              fetchpriority="high"
+            />
+          )
+        ) : (
+          <div class="image-placeholder-detail">Main image not available</div>
+        )}
+      </div>
+      
+      <div class="project-description-section">
+        <h2>Project Overview</h2>
+        <p>{project.description}</p>
+      </div>
+
+      {project.clientUrl && project.clientUrl !== '#' && (
+        <div class="client-link-section">
+          <a href={project.clientUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            Visit Client Site <span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle; margin-left: 0.3em;">open_in_new</span>
+          </a>
+        </div>
+      )}
+      
+      <div class="back-to-projects-section">
+        <a href="/projects" class="btn btn-primary">&laquo; Back to All Projects</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Styles from astro_project_detail_page_v1 are assumed here. */
+  .project-detail-page {
+    padding-bottom: 3rem;
+  }
+  .project-detail-header {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%);
+    color: var(--text-light);
+    padding: 2.5rem 0 3rem;
+    margin-bottom: 2.5rem;
+    text-align: center; 
+  }
+  .breadcrumb {
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; 
+    flex-wrap: wrap;
+  }
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: var(--text-light);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumb span[aria-hidden="true"] { 
+    margin: 0 0.5rem;
+  }
+  .breadcrumb span[aria-current="page"] {
+    font-weight: 500;
+  }
+  .featured-project-badge {
+    background: var(--gold-color);
+    color: var(--dark-blue);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius, 25px);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .project-main-title {
+    color: var(--text-light);
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .project-header-meta {
+    display: flex;
+    gap: 1rem 2rem; 
+    flex-wrap: wrap;
+    justify-content: center;
+    color: rgba(var(--text-light-rgb, 248, 249, 250), 0.9); 
+    font-size: 0.95rem;
+  }
+  .project-header-meta .meta-item strong {
+    font-weight: 600;
+  }
+  .project-body-content.container { }
+  .project-main-image-wrapper {
+    width: 100%;
+    margin-bottom: 2.5rem;
+    border-radius: var(--border-radius, 12px);
+    overflow: hidden;
+    box-shadow: var(--box-shadow, 0 8px 25px rgba(0,0,0,0.1));
+    background-color: var(--medium-gray); 
+  }
+  .project-main-image { 
+    width: 100%;
+    height: auto; 
+    max-height: 600px; 
+    object-fit: cover;
+    display: block;
+  }
+  .image-placeholder-detail {
+    width: 100%;
+    min-height: 300px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+  }
+  .project-description-section { margin-bottom: 2.5rem; }
+  .project-description-section h2 {
+    font-size: 1.8rem;
+    color: var(--dark-blue);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+  }
+  .project-description-section p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-color);
+  }
+  .client-link-section,
+  .back-to-projects-section {
+    margin-top: 2rem;
+    text-align: center; 
+  }
+  .client-link-section .btn,
+  .back-to-projects-section .btn {
+    margin: 0.5rem; 
+  }
+  .btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius, 8px);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-family: var(--font-family-montserrat, sans-serif);
+    text-decoration: none;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .btn-primary {
+    background: var(--primary-color);
+    color: var(--text-light);
+    border: 2px solid var(--primary-color);
+  }
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--primary-color-rgb, 41, 164, 240), 0.3);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+  }
+  .btn-outline:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+  }
+  @media (max-width: 768px) {
+    .project-detail-header h1 { font-size: 2.2rem; }
+    .project-header-meta { flex-direction: column; align-items: center; gap: 0.75rem; }
+    .project-description-section h2 { font-size: 1.6rem; }
+    .project-description-section p { font-size: 1rem; }
+  }
+</style>
