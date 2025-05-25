@@ -1,6 +1,5 @@
 ---
 // src/pages/projects/[...page].astro
-// import { Image } from 'astro:assets'; 
 import type { ImageMetadata } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
@@ -69,7 +68,7 @@ export async function getStaticPaths({ paginate }: { paginate: PaginateFunction 
     console.warn("[projects/[...page].astro] No projects to paginate.");
   }
   return paginate(sortedProjects, { 
-    pageSize: 12, // MODIFIED: Set to 12 projects per page
+    pageSize: 12,
   });
 }
 
@@ -80,6 +79,7 @@ const { page } = Astro.props as PropsPage;
 
 const pageTitle = "Our Projects";
 const pageDescription = "Explore a showcase of our lighting and automation projects.";
+const pageIntro = "Discover the innovative solutions and successful implementations by Onco Solutions."; // Added intro text
 
 const currentPage = page?.currentPage ?? 1;
 const projectsToDisplay = page?.data ?? [];
@@ -88,68 +88,83 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
 ---
 
 <BaseLayout title={currentPageTitle} description={pageDescription}>
-  <div class="projects-listing-page-container container">
-    <header class="projects-header">
-      <h1 class="page-main-title"><span>{pageTitle}</span></h1>
-      {currentPage === 1 && (
-        <p class="projects-intro">
-          Discover the innovative solutions and successful implementations by Onco Solutions.
-        </p>
-      )}
+  <div class="projects-listing-page-container"> {/* Keep this main wrapper if needed for overall page structure */}
+    
+    {/* MODIFIED: Added consistent page header section */}
+    <header class="page-header-section">
+      <div class="container">
+        <h1 class="page-main-title">{pageTitle}</h1>
+        {currentPage === 1 && pageIntro && <p class="page-intro-p">{pageIntro}</p>}
+      </div>
     </header>
 
-    {projectsToDisplay.length > 0 ? (
-      <div class="projects-grid-layout">
-        {projectsToDisplay.map(project => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
-    ) : (
-      <p class="no-projects-message">No projects found. Please check back later.</p>
-    )}
+    <div class="container projects-main-content"> 
+      {/* TODO: Add Category Filter Tiles and "All | Featured" Tabs here later */}
+      
+      {projectsToDisplay.length > 0 ? (
+        <div class="projects-grid-layout">
+          {projectsToDisplay.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      ) : (
+        <p class="no-projects-message">No projects found. Please check back later.</p>
+      )}
 
-    {page && lastPage > 1 && <Pagination page={page} base="/projects" />}
+      {page && lastPage > 1 && <Pagination page={page} base="/projects" />}
+    </div>
   </div>
 </BaseLayout>
 
 <style>
-  .projects-listing-page-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-  .projects-header {
+  /* Common Page Header Style */
+  .page-header-section {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%);
+    color: var(--text-light);
+    padding: 3rem 1rem 2.5rem;
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem; 
   }
-  .page-main-title {
-    margin-bottom: 1rem;
-    color: var(--dark-blue);
-    font-size: 2.5rem;
+
+  .page-header-section .page-main-title {
+    color: var(--text-light);
+    font-size: 2.8rem; 
     font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: inline-block; 
     position: relative;
-    display: block;
+    padding-bottom: 0.5rem; 
   }
-  .page-main-title span {
-    display: inline-block;
-    position: relative;
-    padding-bottom: 0.5rem;
-  }
-  .page-main-title span::after {
+  .page-header-section .page-main-title::after { 
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -8px; 
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 70px;
     height: 4px;
-    background-color: var(--primary-color);
+    background-color: var(--gold-color); 
   }
-  .projects-intro {
+
+  .page-header-section .page-intro-p { 
     font-size: 1.1rem;
-    color: var(--text-color);
-    max-width: 700px;
-    margin: 0 auto 1.5rem auto;
+    opacity: 0.9;
+    max-width: 650px;
+    margin: 1rem auto 0 auto; 
     line-height: 1.6;
+    color: var(--text-light); 
+  }
+  /* End Common Page Header Style */
+
+  .projects-listing-page-container {
+    /* padding-top: 2rem; /* This might be redundant if header has padding */
+    padding-bottom: 2rem;
+  }
+  /* .projects-header class was removed, styles merged into .page-header-section */
+
+  .projects-main-content.container {
+    padding-top: 1rem; /* Adjust if filter bar is added above */
+    padding-bottom: 2rem;
   }
   .projects-grid-layout {
     display: grid;
@@ -157,7 +172,6 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
     gap: 2rem;
     margin-bottom: 2.5rem; 
   }
-
   @media (min-width: 640px) { 
     .projects-grid-layout {
       grid-template-columns: repeat(2, 1fr);
@@ -165,15 +179,9 @@ const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${p
   }
   @media (min-width: 992px) { 
     .projects-grid-layout {
-      grid-template-columns: repeat(3, 1fr); /* This will display 3 cards in a row */
+      grid-template-columns: repeat(3, 1fr); 
     }
   }
-  /* If you had a 4-column layout for 1200px, it's removed to stick to max 3 per row */
-  /* @media (min-width: 1200px) {
-    .projects-grid-layout {
-      grid-template-columns: repeat(4, 1fr); 
-    }
-  } */
   .no-projects-message {
     text-align: center;
     font-size: 1.1rem;

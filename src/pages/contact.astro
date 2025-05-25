@@ -1,164 +1,171 @@
 ---
 // src/pages/contact.astro
-// Assuming your Layout component is in src/layouts/Layout.astro
-// And it handles importing global styles, header, and footer.
 import BaseLayout from "../layouts/BaseLayout.astro"; 
 
-const pageTitle = "Contact Us | Onco";
+const pageTitle = "Contact Us"; // Just the title, " | Onco" will be handled by BaseLayout
+const pageIntro = "We're here to help and answer any question you might have. We look forward to hearing from you.";
 
-// Placeholder for Google Maps Embed URL - replace with your actual URL
-const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d990.2336178193704!2d80.043985!3d6.898441!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25360c886bbc5%3A0x4e6d0024f152e774!2sOnco%20Solutions!5e0!3m2!1sen!2sau!4v1745143303298!5m2!1sen!2sau"; // Replace this
+const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1734.5383371097093!2d80.0447154661884!3d6.898453760239047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25360c886bbc5%3A0x4e6d0024f152e774!2sOnco%20Solutions!5e0!3m2!1sen!2sau!4v1748145044204!5m2!1sen!2sau"
 ---
-<BaseLayout title={pageTitle}>
-  <div class="contact-page-container">
-    <h1 class="page-main-title"><span>Contact Us</span></h1>
-    
-    <div class="contact-content-wrapper">
-      <div class="contact-info-column">
-        <div class="info-block">
-          <h2 class="info-title">Address</h2>
-          <address>
-            B5/GF/1<br />
-            GHS<br />
-            JALTHARA<br />
-            HANWELLA 10650<br />
-            SRI LANKA
-          </address>
+<BaseLayout title={`${pageTitle} | Onco`} description="Get in touch with Onco Solutions for lighting and automation expertise. Find our address, phone, email, and send us a message.">
+  
+  <header class="page-header-section">
+    <div class="container">
+      <h1 class="page-main-title">{pageTitle}</h1>
+      {pageIntro && <p class="page-intro-p">{pageIntro}</p>}
+    </div>
+  </header>
+
+  <div class="contact-page-content-area"> {/* Renamed for clarity */}
+    <div class="container">
+      <div class="contact-content-wrapper">
+        <div class="contact-info-column">
+          <div class="info-block">
+            <h2 class="info-title">Address</h2>
+            <address>
+              B5/GF/1<br />
+              GHS<br />
+              JALTHARA<br />
+              HANWELLA 10650<br />
+              SRI LANKA
+            </address>
+          </div>
+          
+          <div class="info-block">
+            <h2 class="info-title">Phone</h2>
+            <p>Tel: <a href="tel:+94114330388">+94 114 330 388</a></p>
+            <p>Hot: <a href="tel:+94773285033">+94 773 285 033</a></p>
+            <p class="whatsapp-info">
+              <a href="https://wa.me/+94773285033" target="_blank" class="whatsapp-link" aria-label="Chat on WhatsApp">
+                <img src="/images/logo/whatsapp.svg" alt="WhatsApp Icon" class="whatsapp-icon" />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </p>
+          </div>
+          
+          <div class="info-block">
+            <h2 class="info-title">Email</h2>
+            <p><a href="mailto:sales@onco.lk">sales@onco.lk</a></p>
+            <p><a href="mailto:info@onco.lk">info@onco.lk</a></p>
+          </div>
         </div>
         
-        <div class="info-block">
-          <h2 class="info-title">Phone</h2>
-          <p>Tel: <a href="tel:+94114330388">+94 114 330 388</a></p>
-          <p>Hot: <a href="tel:+94773285033">+94 773 285 033</a></p>
-          <p class="whatsapp-info">
-            <a href="https://wa.me/+94773285033" target="_blank" class="whatsapp-link" aria-label="Chat on WhatsApp">
-              <img src="/images/logo/whatsapp.svg" alt="WhatsApp Icon" class="whatsapp-icon" />
-              <span></span>
-            </a>
-          </p>
-        </div>
-        
-        <div class="info-block">
-          <h2 class="info-title">Email</h2>
-          <p><a href="mailto:sales@onco.lk">sales@onco.lk</a></p>
-          <p><a href="mailto:info@onco.lk">info@onco.lk</a></p>
+        <div class="contact-form-column">
+          <h2 class="form-title">Send us a message</h2>
+          <form id="contactForm" class="contact-form" action="mailto:info@onco.lk" method="post" enctype="text/plain">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
         </div>
       </div>
       
-      <div class="contact-form-column">
-        <h2 class="form-title">Send us a message</h2>
-        <form id="contactForm" class="contact-form" action="mailto:info@onco.lk" method="post" enctype="text/plain">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-          </div>
-          
-          <button type="submit" class="submit-btn">Send Message</button>
-        </form>
+      <div class="map-section">
+        <h2 class="map-title">Our Location</h2>
+        <div class="map-iframe-wrapper">
+          <iframe 
+            src={googleMapsEmbedUrl}
+            width="100%" 
+            height="400" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Our Location on Google Maps">
+          </iframe>
+        </div>
       </div>
-    </div>
-    
-    <div class="map-section">
-      <h2 class="map-title">Our Location</h2>
-      <iframe 
-        src={googleMapsEmbedUrl}
-        width="100%" 
-        height="400" 
-        style="border:0; border-radius: var(--border-radius, 8px);" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Our Location on Google Maps">
-      </iframe>
     </div>
   </div>
 </BaseLayout>
 
 <style>
-  /* Assuming :root variables are in your global.css imported by Layout.astro */
-  /* Example variables from your palette:
-  :root {
-    --primary-color: rgba(41, 164, 240, 0.9);
-    --primary-hover: #0056b3;
-    --dark-blue: #01245c;
-    --text-color: #1d2951;
-    --text-light: #f8f9fa;
-    --light-bg: #f8f9fa;
-    --secondary-color: #6c757d;
-    --medium-gray: #ddd;
-    --border-radius: 5px;
-  }
-  */
-
-  .contact-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem; /* Default padding */
-    color: var(--text-color);
-  }
-
-  .page-main-title {
+  /* Common Page Header Style (can be moved to global if used identically everywhere) */
+  .page-header-section {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%);
+    color: var(--text-light);
+    padding: 3rem 1rem 2.5rem;
     text-align: center;
-    margin-bottom: 3rem;
-    color: var(--dark-blue);
-    font-size: 2.5rem;
+    margin-bottom: 2.5rem; 
+  }
+
+  .page-header-section .page-main-title {
+    color: var(--text-light);
+    font-size: 2.8rem; 
     font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: inline-block; 
     position: relative;
-    display: block; /* To allow centering of the underline */
+    padding-bottom: 0.5rem; 
   }
-  .page-main-title span {
-    display: inline-block; /* To make underline only span text */
-    position: relative;
-    padding-bottom: 0.5rem;
-  }
-  .page-main-title span::after {
+  .page-header-section .page-main-title::after { 
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -8px; 
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 70px;
     height: 4px;
-    background-color: var(--primary-color);
+    background-color: var(--gold-color); /* Using gold for accent */
+  }
+
+  .page-header-section .page-intro-p { 
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 650px;
+    margin: 1rem auto 0 auto; 
+    line-height: 1.6;
+    color: var(--text-light); 
+  }
+  /* End Common Page Header Style */
+
+  .contact-page-content-area { /* Wrapper for content below header */
+    /* Add padding here if header margin-bottom is removed */
+  }
+
+  .contact-page-content-area .container { /* Ensure this container uses global padding */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem; /* Consistent with other container padding */
+    color: var(--text-color);
   }
   
   .contact-content-wrapper {
     display: grid;
-    grid-template-columns: 1fr; /* Single column for mobile */
+    grid-template-columns: 1fr; 
     gap: 2.5rem;
     margin-bottom: 3rem;
   }
 
   @media (min-width: 768px) {
     .contact-content-wrapper {
-      grid-template-columns: 1fr 1.5fr; /* Info left, form right (wider) */
+      grid-template-columns: 1fr 1.5fr; 
       gap: 3rem;
     }
-  }
-  
-  .contact-info-column, .contact-form-column {
-    /* min-width: 300px; /* Already handled by grid */
   }
   
   .info-block {
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background-color: var(--light-gray); /* Light background for info blocks */
+    background-color: var(--light-gray); 
     border-radius: var(--border-radius, 8px);
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
@@ -173,7 +180,7 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
     font-weight: 600;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--primary-color);
-    display: inline-block; /* To make border only span text */
+    display: inline-block; 
   }
   
   address {
@@ -204,25 +211,24 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background-color: var(--light-gray); /* WhatsApp green */
-    color: white !important; /* Override default link color */
+    background-color: #25D366; 
+    color: white !important; 
     border-radius: var(--border-radius, 25px);
     text-decoration: none !important;
     font-weight: 500;
     transition: background-color 0.3s ease;
   }
   .whatsapp-link:hover {
-    background-color: var(--medium-gray); /* Darker WhatsApp green */
+    background-color: #1DA851; 
     color: white !important;
   }
   .whatsapp-icon {
-    /* width: 20px;
-    height: 20px; */
+    width: 20px;
+    height: 20px;
     margin-right: 0.5rem;
     vertical-align: middle;
   }
   
-  /* Form Styles */
   .contact-form {
     background-color: var(--light-bg);
     padding: 2rem;
@@ -250,16 +256,16 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
     border-radius: var(--border-radius, 4px);
     font-family: inherit;
     font-size: 1rem;
-    background-color: #fff; /* Ensure input background is white */
+    background-color: #fff; 
     color: var(--text-color);
-    box-sizing: border-box; /* Important for width calculation */
+    box-sizing: border-box; 
   }
   .form-group input[type="text"]:focus,
   .form-group input[type="email"]:focus,
   .form-group textarea:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 41, 164, 240), 0.2); /* Define --primary-color-rgb if not already */
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 41, 164, 240), 0.2); 
   }
   
   .form-group textarea {
@@ -285,22 +291,40 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
     transform: translateY(-2px);
   }
   
-  /* Map Section */
   .map-section {
     width: 100%;
     margin-top: 2rem;
     padding: 1.5rem;
     background-color: var(--light-gray);
     border-radius: var(--border-radius, 8px);
+    box-sizing: border-box;
+  }
+  .map-iframe-wrapper { 
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; 
+    height: 0;
+    overflow: hidden;
+    border-radius: var(--border-radius, 8px); 
+  }
+  .map-iframe-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0; 
   }
   
-  /* Responsive Design */
-  @media (max-width: 767px) { /* Mobile specific adjustments */
+  @media (max-width: 767px) { 
     .contact-page-container {
-      padding: 2rem 0.75rem; /* Reduce padding on smaller mobile */
+      padding: 2rem 0.75rem; 
     }
-    .page-main-title {
-      font-size: 2rem;
+    .page-header-section .page-main-title { /* Target title within header */
+      font-size: 2.2rem; /* Adjust title size for mobile */
+    }
+     .page-header-section .page-intro-p {
+      font-size: 1rem;
     }
     .info-title, .form-title, .map-title {
       font-size: 1.4rem;
@@ -308,11 +332,14 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
     .contact-form {
       padding: 1.5rem;
     }
+    .map-section {
+      padding: 1rem; 
+    }
   }
 </style>
 
 <script>
-  // Simple form validation
+  // Simple form validation (from your original code)
   document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     
@@ -324,8 +351,6 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
         const messageInput = document.getElementById('message') as HTMLTextAreaElement | null;
         
         if (!nameInput || !emailInput || !subjectInput || !messageInput) {
-          // This check is mostly for TypeScript to know elements exist past this point
-          // Or if the DOM structure was unexpectedly changed.
           console.error('Form elements not found.');
           e.preventDefault(); 
           return false;
@@ -339,12 +364,8 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
         let isValid = true;
         let firstInvalidField: HTMLElement | null = null;
 
-        // Clear previous error messages/styles if any
-        // (You would add error message elements or classes for a better UX)
-
         if (!name) {
           isValid = false;
-          // Example: nameInput.classList.add('error'); 
           if (!firstInvalidField) firstInvalidField = nameInput;
         }
         if (!email) {
@@ -355,7 +376,7 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
           if (!emailRegex.test(email)) {
             isValid = false;
             if (!firstInvalidField) firstInvalidField = emailInput;
-            alert('Please enter a valid email address.'); // Keep specific alert for email
+            alert('Please enter a valid email address.'); 
           }
         }
         if (!subject) {
@@ -375,9 +396,7 @@ const googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1
           }
           return false;
         }
-        
-        // Optional: Feedback before mailto redirect
-        alert('Thank you for your message. Your email client will open to send this message.');
+        // alert('Thank you for your message. Your email client will open to send this message.');
       });
     }
   });

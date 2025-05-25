@@ -4,145 +4,133 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro'; 
 import BlogCard from '../../components/BlogCard.astro';   
 import Pagination from '../../components/Pagination.astro'; 
-import type { Page, PaginateFunction, GetStaticPathsResult } from 'astro'; // Added GetStaticPathsResult for typing 'p'
+import type { Page, PaginateFunction, GetStaticPathsResult } from 'astro';
 
-// Define the props for each generated page route by paginate
 interface PaginatedBlogRouteProps {
   page: Page<CollectionEntry<'blog'>>;
 }
-// Define the structure of an individual item in the array returned by paginate
 type PaginateResultItem = {
-  params: { page: string | undefined }; // Or Record<string, string | undefined> if page param name differs
+  params: { page: string | undefined }; 
   props: PaginatedBlogRouteProps;
 };
 
-
 export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
-  console.log("[blog/[...page].astro] getStaticPaths: Fetching blog collection...");
   const allBlogPosts = await getCollection('blog', (entry: CollectionEntry<'blog'>) => {
     return entry.data.isDraft !== true; 
   });
-  console.log(`[blog/[...page].astro] getStaticPaths: Found ${allBlogPosts.length} raw entries from getCollection (after draft filter).`);
-
   const sortedPosts = allBlogPosts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
     const dateA = a.data.publishDate ? new Date(a.data.publishDate).valueOf() : 0;
     const dateB = b.data.publishDate ? new Date(b.data.publishDate).valueOf() : 0;
     return dateB - dateA;
   });
   
-  console.log(`[blog/[...page].astro] getStaticPaths: Found ${sortedPosts.length} non-draft blog posts to paginate.`);
   if (sortedPosts.length === 0) {
-    console.warn("[blog/[...page].astro] getStaticPaths: No publishable blog posts found. Paginate will be called with an empty array. This might lead to an empty blog index page.");
+    console.warn("[blog/[...page].astro] No publishable blog posts found for pagination.");
   }
   
   const paginationResult = paginate(sortedPosts, { pageSize: 6 }); 
-  
-  console.log("[blog/[...page].astro] getStaticPaths: Pagination result (paths to be generated):", JSON.stringify(
-    // MODIFIED: Explicitly type 'p' here
-    paginationResult.map((p: PaginateResultItem) => ({ 
-        params: p.params, 
-        propsKeys: p.props ? Object.keys(p.props) : [] // Guard against p.props being null/undefined
-    })), 
-    null, 
-    2
-  ));
   return paginationResult;
 }
 
-// Props for the page component itself
 interface Props {
   page: Page<CollectionEntry<'blog'>>; 
 }
 const { page } = Astro.props as Props; 
 
-if (!page) {
-  console.error(`[blog/[...page].astro] CRITICAL: 'page' prop is undefined for Astro.props:`, JSON.stringify(Astro.props));
-}
-
 const pageTitle = "Our Blog & Knowledge Base";
 const pageDescription = "Explore articles, insights, and updates from Onco Solutions on lighting, automation, and more.";
+const pageIntro = "Discover insights, tips, and updates on smart lighting, automation, and innovative solutions from the Onco Solutions team.";
 
 const currentPage = page?.currentPage ?? 1;
 const postsToDisplay = page?.data ?? [];
 const lastPage = page?.lastPage ?? 1; 
-
-const currentPageTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${page.currentPage}` : pageTitle;
+const currentPageBrowserTitle = page && page.currentPage > 1 ? `${pageTitle} - Page ${page.currentPage}` : pageTitle;
 ---
-<BaseLayout title={currentPageTitle} description={pageDescription}>
-  <div class="blog-index-container container">
-    <header class="blog-header">
-      <h1 class="page-main-title"><span>{pageTitle}</span></h1>
-      {currentPage === 1 && (
-        <p class="blog-intro">
-          Discover insights, tips, and updates on smart lighting, automation, 
-          and innovative solutions from the Onco Solutions team.
-        </p>
-      )}
+<BaseLayout title={currentPageBrowserTitle} description={pageDescription}>
+  <div class="blog-index-page-container"> {/* Changed class name */}
+    
+    {/* MODIFIED: Using consistent page header section style */}
+    <header class="page-header-section">
+      <div class="container">
+        {/* The h1 no longer needs an inner span if ::after is on .page-main-title */}
+        <h1 class="page-main-title">{pageTitle}</h1> 
+        {currentPage === 1 && pageIntro && <p class="page-intro-p">{pageIntro}</p>}
+      </div>
     </header>
 
-    {postsToDisplay.length > 0 ? (
-      <div class="blog-posts-grid">
-        {postsToDisplay.map((post: CollectionEntry<'blog'>) => ( // This was already correctly typed
-          <BlogCard post={post} />
-        ))}
-      </div>
-    ) : (
-      <p class="no-posts-message">No blog posts found. Check back soon!</p>
-    )}
+    <div class="container blog-main-content">
+      {postsToDisplay.length > 0 ? (
+        <div class="blog-posts-grid">
+          {postsToDisplay.map((post: CollectionEntry<'blog'>) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="no-posts-message">No blog posts found. Check back soon!</p>
+      )}
 
-    {page && lastPage > 1 && <Pagination page={page} base="/blog" />}
+      {page && lastPage > 1 && <Pagination page={page} base="/blog" />}
+    </div>
   </div>
 </BaseLayout>
 
 <style>
-  /* Styles from previous version are assumed here */
-  .blog-index-container {
-    padding-top: 2rem;
+  /* Common Page Header Style - Ensure this matches projects page or is global */
+  .page-header-section {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%);
+    color: var(--text-light);
+    padding: 3rem 1rem 2.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem; 
+  }
+
+  .page-header-section .page-main-title {
+    color: var(--text-light);
+    font-size: 2.8rem; 
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: inline-block; /* To allow underline to span just the text */
+    position: relative;
+    padding-bottom: 0.5rem; 
+  }
+  .page-header-section .page-main-title::after { 
+    content: '';
+    position: absolute;
+    bottom: -8px; /* Adjust position of underline */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 4px;
+    background-color: var(--gold-color); /* Using gold for accent */
+  }
+
+  .page-header-section .page-intro-p { 
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 650px;
+    margin: 1rem auto 0 auto; 
+    line-height: 1.6;
+    color: var(--text-light); 
+  }
+  /* End Common Page Header Style */
+
+  .blog-index-page-container {
+    /* padding-top: 2rem; /* This might be redundant if header has padding */
     padding-bottom: 2rem;
     box-sizing: border-box; 
   }
+  /* .blog-header class was removed, styles merged into .page-header-section */
 
-  .blog-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-main-title {
-    margin-bottom: 1rem;
-    color: var(--dark-blue);
-    font-size: 2.5rem;
-    font-weight: 700;
-    position: relative;
-    display: block; 
-  }
-  .page-main-title span {
-    display: inline-block; 
-    position: relative;
-    padding-bottom: 0.5rem;
-  }
-  .page-main-title span::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background-color: var(--primary-color);
-  }
-
-  .blog-intro {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    max-width: 700px;
-    margin: 0 auto 1.5rem auto;
-    line-height: 1.6;
+  .blog-main-content.container {
+    padding-top: 1rem; /* Space below header/filter bar */
+    padding-bottom: 2rem;
   }
 
   .blog-posts-grid {
     display: grid;
     grid-template-columns: 1fr; 
     gap: 2rem; 
+    margin-bottom: 2.5rem; /* Space before pagination */
   }
 
   @media (min-width: 640px) { 
