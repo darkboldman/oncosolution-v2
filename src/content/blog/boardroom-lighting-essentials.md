@@ -9,7 +9,6 @@ tags: ["Boardroom Lighting", "Office Lighting", "Smart Automation", "Productivit
 isDraft: false
 ---
 
-# Creating Effective, Automated Meeting Spaces – From Onco Solutions
 
 The boardroom is more than just a table and chairs — it’s where ideas are presented, deals are made, and leadership happens. Lighting in such an environment needs to balance professionalism, comfort, technology, and functionality.
 

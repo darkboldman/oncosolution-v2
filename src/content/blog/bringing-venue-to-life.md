@@ -9,7 +9,6 @@ tags: ["LED Lighting", "RGB", "DMX Control", "Event Lighting", "Club Lighting", 
 isDraft: false
 ---
 
-# Transforming Atmospheres with Light – From Onco Solutions
 
 Lighting isn’t just functional anymore — it’s fundamental to the experience. Whether you're managing a high-energy club, a sophisticated function hall, or a live music and dance venue, the right lighting system sets the mood, enhances performances, and elevates the entire space.
 

@@ -9,7 +9,7 @@ tags: ["Sensor Calibration", "Smart Lighting", "Motion Sensors", "Daylight Senso
 isDraft: false
 ---
 
-# Get the Best from Your Smart Lighting System – With Onco Solutions
+
 
 Smart lighting is only as smart as the sensors behind it. Whether you’re using motion detectors, daylight sensors, or occupancy sensors, accurate calibration is essential for performance, efficiency, and reliability.
 

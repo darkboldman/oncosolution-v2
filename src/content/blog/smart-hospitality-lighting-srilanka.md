@@ -9,7 +9,6 @@ tags: ["Smart Lighting", "Hospitality Automation", "Hotel Technology", "Guest Ex
 isDraft: false
 ---
 
-# Elevate Your Guest Experience with Onco Solutions' Advanced Smart Lighting Systems
 
 At Onco Solutions, we specialize in transforming the hospitality experience through cutting-edge smart lighting automation designed specifically for hotels, resorts, villas, and boutique accommodations across Sri Lanka. Our solutions not only enhance guest comfort and satisfaction but also drive operational efficiency and energy savings — helping your property stand out in a competitive market.
 

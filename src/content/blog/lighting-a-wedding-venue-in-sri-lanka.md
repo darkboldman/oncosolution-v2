@@ -9,7 +9,6 @@ tags: ["Wedding Lighting", "LED Lighting", "Smart Venues", "Event Design", "RGB"
 isDraft: false
 ---
 
-# Elegant & Smart: Lighting That Elevates Every Wedding Moment
 
 A wedding is more than an event — it's an experience. And lighting is what transforms that experience from beautiful to breathtaking. From romantic ceremonies to vibrant dance floors, the right lighting creates atmosphere, enhances decor, and sets the perfect mood at every moment.
 

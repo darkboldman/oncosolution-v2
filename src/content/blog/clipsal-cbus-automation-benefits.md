@@ -9,9 +9,6 @@ tags: ["Clipsal C-Bus", "Home Automation", "Building Automation", "Smart Home", 
 isDraft: false
 ---
 
-# Transform Your Home or Business with Clipsal C-Bus Automation
-
-**Available at Onco.lk – Sri Lanka’s Trusted Smart Solutions Partner**
 
 In today’s fast-paced world, Clipsal C-Bus automation transforms ordinary spaces into intelligent environments, offering unmatched comfort, security, energy efficiency, and control.
 

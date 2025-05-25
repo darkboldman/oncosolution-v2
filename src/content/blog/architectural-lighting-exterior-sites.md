@@ -9,7 +9,6 @@ tags: ["Architectural Lighting", "Exterior Lighting", "Building Design", "Landma
 isDraft: false
 ---
 
-# Transforming Structures into Landmarks – From Onco Solutions
 
 Every building tells a story — and architectural lighting brings that story to life after dark.
 

@@ -9,7 +9,7 @@ tags: ["LED Lighting", "Factory Lighting", "Industrial Lighting", "Energy Effici
 isDraft: false
 ---
 
-# Why LED Lighting is the Smart Choice for Factory Settings
+
 
 Modern factories require more than just lighting—they need **smart, durable, and cost-effective illumination** that supports productivity, safety, and operational efficiency. At **Onco Solutions**, we specialize in designing and deploying advanced LED lighting systems tailored to industrial and factory environments across **Sri Lanka**.
 
