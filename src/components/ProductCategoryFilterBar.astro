@@ -7,8 +7,8 @@ import categoriesData from '../data/categories.json';
 interface CategoryJsonItem {
   id: string;
   name: string;
-  image: string; // Expects path like "/src/assets/images/categories/cat-image.jpg"
-  isFeatured?: boolean; // Not used for sizing here, but data is available
+  image: string; 
+  isFeatured?: boolean; 
 }
 
 interface CategoryFilterItem {
@@ -16,10 +16,9 @@ interface CategoryFilterItem {
   name: string;
   link: string;
   imageMeta?: ImageMetadata;
-  isActive?: boolean; // To style the currently active filter
+  isActive?: boolean; 
 }
 
-// Get all category images
 const allCategoryImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/categories/**/*.{jpeg,jpg,png,webp,gif,svg}',
   { eager: true }
@@ -30,8 +29,7 @@ for (const path in allCategoryImages) {
   imageMetaMap.set(path, allCategoryImages[path].default);
 }
 
-// Prepare categories for display
-let displayItems: CategoryFilterItem[] = categoriesData.map((categoryJson: any) => {
+const actualCategories: CategoryFilterItem[] = categoriesData.map((categoryJson: any) => {
   const category = categoryJson as CategoryJsonItem;
   let imageMeta: ImageMetadata | undefined = undefined;
   if (imageMetaMap.has(category.image)) {
@@ -43,101 +41,130 @@ let displayItems: CategoryFilterItem[] = categoriesData.map((categoryJson: any) 
     id: category.id,
     name: category.name,
     imageMeta: imageMeta,
-    link: `/products/category/${category.id}` // Link to specific category page
+    link: `/products/category/${category.id}` 
   };
 });
 
-// Add "All Products" tile at the beginning
-displayItems.unshift({
-  id: "all",
-  name: "All Products",
-  link: "/products", // Link to the base products page (page 1 of all products)
-  imageMeta: undefined, // No specific image for "All", or you can assign one
-});
+const { currentFilterId = "all" } = Astro.props; 
 
-// Determine active filter based on current URL
-// This assumes your product listing pages will pass down the current category slug or filter type
-const { currentFilterId = "all" } = Astro.props; // Default to "all"
-
-displayItems = displayItems.map(item => ({
-  ...item,
-  isActive: item.id === currentFilterId
-}));
+// Calculate animation duration based on number of categories
+// Adjust the multiplier (e.g., 3s per category) for desired speed
+const animationDuration = actualCategories.length * 8; 
 ---
 
-<div class="category-filter-bar-wrapper">
-  <div class="container">
-    <div class="filter-tiles-scroll-container">
-      {displayItems.map(item => (
-        <a 
-          href={item.link} 
-          class:list={["filter-item", { active: item.isActive }]}
-          title={`View ${item.name}`}
-        >
-          {item.imageMeta && (
-            <div class="filter-item-image-wrapper">
-              <Image 
-                src={item.imageMeta} 
-                alt={`${item.name} icon`}
-                class="filter-item-image"
-                width={24} 
-                height={24}
-                format="webp"
-                quality="mid"
-                loading="lazy"
-              />
-            </div>
-          )}
-          {!item.imageMeta && item.id !== 'all' && ( /* Placeholder if imageMeta fails for a specific category */
-            <div class="filter-item-image-placeholder material-symbols-outlined">category</div>
-          )}
-          {item.id === 'all' && !item.imageMeta && ( /* Icon for "All Products" if no image specified */
-             <div class="filter-item-image-placeholder material-symbols-outlined">widgets</div>
-          )}
-          <span class="filter-item-name">{item.name}</span>
-        </a>
-      ))}
-    </div>
+<div class="category-filter-bar-section">
+  <div class="container category-filter-bar-container">
+    {/* Static "All Products" Tab */}
+    <a 
+      href="/products" 
+      class:list={["filter-item", "all-products-tab", { active: currentFilterId === "all" }]}
+      title="View All Products"
+    >
+      <div class="filter-item-image-placeholder material-symbols-outlined">widgets</div>
+      <span class="filter-item-name">All Products</span>
+    </a>
+
+    {/* Scrolling Categories Area */}
+    {actualCategories.length > 0 && (
+      <div class="scrolling-categories-wrapper">
+        <div class="scrolling-track" style={`--animation-duration: ${animationDuration}s;`}>
+          {actualCategories.map(item => (
+            <a 
+              href={item.link} 
+              class:list={["filter-item", { active: item.id === currentFilterId }]}
+              title={`View ${item.name}`}
+            >
+              {item.imageMeta && (
+                <div class="filter-item-image-wrapper">
+                  <Image 
+                    src={item.imageMeta} 
+                    alt={`${item.name} icon`}
+                    class="filter-item-image"
+                    width={24} height={24} format="webp" quality="mid" loading="lazy"
+                  />
+                </div>
+              )}
+              {!item.imageMeta && (<div class="filter-item-image-placeholder material-symbols-outlined">category</div>)}
+              <span class="filter-item-name">{item.name}</span>
+            </a>
+          ))}
+          {actualCategories.map(item => ( /* Duplicate for infinite scroll */
+            <a 
+              href={item.link} 
+              class:list={["filter-item", { active: item.id === currentFilterId }]}
+              title={`View ${item.name}`}
+              aria-hidden="true" tabindex="-1" 
+            >
+              {item.imageMeta && (
+                <div class="filter-item-image-wrapper">
+                  <Image 
+                    src={item.imageMeta} 
+                    alt="" 
+                    class="filter-item-image"
+                    width={24} height={24} format="webp" quality="mid" loading="lazy"
+                  />
+                </div>
+              )}
+              {!item.imageMeta && (<div class="filter-item-image-placeholder material-symbols-outlined">category</div>)}
+              <span class="filter-item-name">{item.name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 </div>
 
 <style>
-  .category-filter-bar-wrapper {
-    padding: 1rem 0 1.5rem 0; /* Padding for the section */
-    background-color: var(--light-gray); /* Light background for the bar */
+  .category-filter-bar-section {
+    padding: 1rem 0 1.5rem 0;
+    background-color: var(--light-gray);
     border-bottom: 1px solid var(--medium-gray);
   }
 
-  .container {
-    /* Uses global container styles */
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+  .category-filter-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Gap between "All Products" and the scroller */
   }
 
-  .filter-tiles-scroll-container {
-    overflow-x: auto; /* Allow horizontal scrolling if many categories */
-    white-space: nowrap; /* Keep items in a single line */
-    padding-bottom: 10px; /* Space for scrollbar if it appears */
-    margin-bottom: -10px; /* Counteract padding for layout */
-  }
-  /* Hide scrollbar for a cleaner look, but still scrollable */
-  .filter-tiles-scroll-container::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
-  }
-  .filter-tiles-scroll-container {
-    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
-    scrollbar-width: none;  /* For Firefox */
+  .all-products-tab {
+    flex-shrink: 0; /* Prevent "All Products" tab from shrinking */
   }
 
+  .scrolling-categories-wrapper {
+    flex-grow: 1; /* Allow scroller to take remaining space */
+    overflow: hidden; /* This is crucial */
+    position: relative; /* For potential pseudo-elements like fades */
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .scrolling-track {
+    display: flex;
+    width: max-content; /* Let the content (doubled list) determine width */
+    animation: scrollCategories var(--animation-duration) linear infinite;
+  }
+  .scrolling-categories-wrapper:hover .scrolling-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes scrollCategories {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%); /* Scroll by the width of one set of items */
+    }
+  }
 
   .filter-item {
-    display: inline-flex; /* Align image and text inline */
+    display: inline-flex;
     align-items: center;
     padding: 0.6rem 1rem;
-    margin-right: 0.75rem; /* Space between tiles */
+    margin-right: 0.75rem; 
     border: 1px solid var(--medium-gray);
-    border-radius: var(--border-radius); /* Pill shape or regular radius */
+    border-radius: var(--border-radius, 20px); 
     background-color: var(--light-bg, #fff);
     color: var(--text-color);
     text-decoration: none;
@@ -145,10 +172,16 @@ displayItems = displayItems.map(item => ({
     font-weight: 500;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    white-space: nowrap; 
   }
-  .filter-item:last-child {
-    margin-right: 0;
+  .filter-item:last-child { /* Last item in each set */
+    margin-right: 0; 
   }
+   /* Add back margin to the actual last child of the duplicated track to maintain spacing before loop restarts */
+  .scrolling-track > .filter-item:nth-child({actualCategories.length}) {
+      margin-right: 0.75rem;
+  }
+
 
   .filter-item:hover {
     background-color: var(--primary-color);
@@ -165,19 +198,19 @@ displayItems = displayItems.map(item => ({
   }
 
   .filter-item-image-wrapper {
-    width: 24px; /* Match image width */
-    height: 24px; /* Match image height */
+    width: 24px; 
+    height: 24px;
     margin-right: 0.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* If images are not perfectly square */
-    border-radius: 3px; /* Slight rounding for image container */
+    overflow: hidden; 
+    border-radius: 3px; 
   }
-  .filter-item-image { /* Targets img from <Image /> */
+  .filter-item-image { 
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Or 'cover', depending on desired look for small icons */
+    object-fit: contain; 
   }
   .filter-item-image-placeholder {
     width: 24px;
@@ -186,15 +219,29 @@ displayItems = displayItems.map(item => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem; /* Size for material symbol icon */
+    font-size: 1.2rem; 
     color: var(--secondary-color);
   }
   .filter-item.active .filter-item-image-placeholder {
-    color: var(--text-light); /* Change placeholder color if active */
+    color: var(--text-light); 
+  }
+  .filter-item-name {
+    white-space: nowrap; 
   }
 
-
-  .filter-item-name {
-    white-space: nowrap; /* Prevent category name from wrapping */
+  @media (max-width: 768px) {
+    .category-filter-bar-container {
+        /* On smaller screens, you might want the "All Products" tab to be less prominent 
+           or the scroller to take more precedence if space is very tight. 
+           For now, flex handles basic shrinking. */
+    }
+    .filter-item {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    .scrolling-categories-wrapper {
+        mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+    }
   }
 </style>

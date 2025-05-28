@@ -233,62 +233,74 @@
     ]
   },
   {
-    "id": "Aluminim Profile - AL- OS - 02",
-    "category": "LED Aluminium",
-    "catImage": "/images/category/led-profiles-collection.png",
-    "name": "Aluminim Profile - AL- OS - 02",
-    "shortDescription": "DALUX® LED aluminium profiles are engineered for targeted lighting applications, delivering both function and style. Choose between standalone profiles with diffusers or pre-assembled options featuring integrated LED linear strips for quick and effortless installation. To complete your setup, a full range of accessories — including end caps, mounting brackets, and suspension links — are available to suit any installation need.",
-    "description": ["Excruted from high quality alumminium stock","Purpose designed extusions for specialised applications", "Sturdy profile with correct gauge for application", "Enhanced heat management increase LED light quality & life", "Correct installation accessories for application","Custom color options available - MOQ & Lead times apply"],
-    "highlights": [
-      {
-        "icon": "straighten",
-        "text": "Custom Lengths"
-      },
-      {
-        "icon": "warehouse",
-        "text": "Local Stocks"
-      },
-      {
-        "icon": "workspace_premium",
-        "text": "Premium Quality"
-      },
-      {
-        "icon": "palette",
-        "text": "Colour Options"
-      }
-    ],
-    "price": 19.99,
-    "featured": "no",
-    "stockStatus": "In stock",
-    "images": [
-      "/images/products/aluminium--cross--section--02.png",
-      "/images/products/AL-OS-02.jpg"
-    ],
-    "specifications": {
-      "Length": "2 meters",
-      "Width": "15.80 mm",
-      "Height": "15.80 mm",
-      "LED Width": "10.50 mm (Max)",
-      "Diffuser": "PC-Milky/Frosted",
-      "Accessories": "End Caps & Clips",
-      "Installation": "Surface/Recessed",
-      "Material": "Aluminium | Polycarbonate"
+  "id": "MEANWELL-LRS-350-24V",
+  "category": "Power Supplies",
+  "catImage": "src/assets/images/category/power-supplies/power-supplies-collection.png",
+  "name": "Meanwell LRS-350-24V AC/DC Power Supply",
+  "shortDescription": "The MEANWELL LRS-350 series is a compact, high-efficiency switching power supply designed for industrial applications. With 89% typical efficiency, full protection features, and a 1U low-profile design, it's ideal for LED lighting, industrial control systems, and telecommunications equipment.",
+  "description": [
+    "Ultra-compact 1U low-profile design for space-constrained installations",
+    "Very low no-load power consumption (<0.75W)",
+    "300V AC input surge protection",
+    "Built-in over-voltage, over-load, and short-circuit protection",
+    "Cooling by free air convection (no fan required)",
+    "Complies with safety standards IEC/EN/UL 62368-1"
+  ],
+  "highlights": [
+    {
+      "icon": "bolt",
+      "text": "Surge Protection"
     },
-    "documents": [
-      {
-        "name": "Product Brochure",
-        "file": "/documents/flexible-led-strip-brochure.pdf"
-      },
-      {
-        "name": "Compliance Certificate",
-        "file": "/documents/flexible-led-strip-compliance.pdf"
-      },
-      {
-        "name": "Test Report",
-        "file": "/documents/flexible-led-strip-test-report.pdf"
-      }
-    ]
+    {
+      "icon": "verified",
+      "text": "UL Certified"
+    },
+    {
+      "icon": "battery_full",
+      "text": "89% Efficiency"
+    },
+    {
+      "icon": "settings",
+      "text": "Industrial Grade"
+    }
+  ],
+  "price": 62.50,
+  "featured": "yes",
+  "stockStatus": "In stock",
+  "images": [
+    "src/assets/images/products/power-supplies/meanwell-lrs-350-24v-front.jpg",
+    "src/assets/images/products/power-supplies/meanwell-lrs-350-24v-side.jpg",
+    "src/assets/images/products/power-supplies/meanwell-lrs-350-24v-diagram.png"
+  ],
+  "specifications": {
+    "Input Voltage": "90-264V AC",
+    "Output Voltage": "24V DC",
+    "Output Current": "14.6A",
+    "Output Power": "350W",
+    "Efficiency": "89% (Typical)",
+    "Protections": "Over Voltage/Over Load/Short Circuit",
+    "Cooling Method": "Free Air Convection",
+    "Dimensions": "199*99*38mm (L*W*H)",
+    "Weight": "0.68kg",
+    "Certifications": "UL 62368-1, CE, CB",
+    "Operating Temp": "-30°C to +70°C",
+    "MTBF": ">300,000 hrs"
   },
+  "documents": [
+    {
+      "name": "Datasheet",
+      "file": "/documents/meanwell-lrs-350-datasheet.pdf"
+    },
+    {
+      "name": "Safety Certificate",
+      "file": "/documents/meanwell-lrs-350-certificate.pdf"
+    },
+    {
+      "name": "Installation Guide",
+      "file": "/documents/meanwell-lrs-350-installation.pdf"
+    }
+  ]
+},
   {
     "id": "Aluminim Profile - AL- OS - 03",
     "category": "LED Aluminium",
