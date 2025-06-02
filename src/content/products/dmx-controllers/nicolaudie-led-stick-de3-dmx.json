@@ -1,0 +1,68 @@
+{
+  "id": "nicolaudie-led-stick-de3-dmx",
+  "slug": "nicolaudie-led-stick-de3-dmx",
+  "category_id": "dmx-controllers",
+  "category": "DMX Controllers",
+  "name": "Nicolaudie® LED Stick DE3 DMX",
+  "metaTitle": "Nicolaudie® LED Stick DE3 DMX Controller | Onco Solutions",
+  "metaDescription": "The Nicolaudie® STICK-DE3 DMX controller features a graphical color display, 1024 channels, and USB/Ethernet connectivity for demanding lighting projects.",
+  "published": true,
+  "shortDescription": "The feature rich STICK-DE3 has been designed to provide a control solution for the most demanding of projects and yet easy enough for anyone to use. The controller integrates a graphical color display, allowing scene photos to be displayed. Easily view the selected zone, scene name and design without the need to navigate through complex menus.",
+  "description_points": [
+    "New glass design with Graphical color display",
+    "Color/dimmer/speed palette",
+    "500 scenes, 10 zones",
+    "1024 DMX channels",
+    "USB & Ethernet connectivity",
+    "Compatible with wide range of LED digital lights",
+    "RS232, ports, infra red"
+  ],
+  "price": 19.99,
+  "isFeatured": true,
+  "stockStatus": "Order on demand",
+  "images": [
+    {
+      "src": "/images/products/dmx-controllers/nicolaudie-led-stick-de3-dmx.jpg",
+      "alt": "Nicolaudie® LED Stick DE3 DMX image 1"
+    },
+    {
+      "src": "/images/products/dmx-controllers/nicolodie-STICK-D3-black-white-package.jpg",
+      "alt": "Nicolaudie® LED Stick DE3 DMX image 2"
+    },
+    {
+      "src": "/images/products/dmx-controllers/nicolodie-STICK-DE3-white.png",
+      "alt": "Nicolaudie® LED Stick DE3 DMX image 3"
+    }
+  ],
+  "highlights": [
+    { "icon": "hub", "text": "Addressable LED" },
+    { "icon": "palette", "text": "Colour Wheel" },
+    { "icon": "lan", "text": "Ethernet Enabled" },
+    { "icon": "manage_accounts", "text": "Easy to Setup" }
+  ],
+  "specifications": [
+    { "name": "Light Source", "value": "LED" },
+    { "name": "Data Output", "value": "1024 DMX channels" },
+    { "name": "Maximum Output/Port", "value": "680 : RGB LEDs, 512 : RGBW LEDs, 2048 : 1-Channel LEDs" },
+    { "name": "USB", "value": "1 x Port USB 2.0 Type-B, Female Socket" },
+    { "name": "Weight", "value": "250g" },
+    { "name": "Dimension (mm)", "value": "106 x 146 x 10" },
+    { "name": "Memory", "value": "Micro SD card" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Certificates", "value": "CE, EAC, FCC, RoHS" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/dmx-controllers/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/dmx-controllers/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/dmx-controllers/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

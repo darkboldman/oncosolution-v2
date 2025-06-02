@@ -1,0 +1,55 @@
+{
+  "id": "meanwell-lrs-power-supplies-150-24",
+  "slug": "meanwell-lrs-power-supplies-150-24",
+  "category_id": "power-supplies",
+  "category": "Power Supplies",
+  "name": "MEANWELL® LRS power supplies - 150-24",
+  "metaTitle": "Meanwell LRS-150-24 150W 24V Power Supply | Onco Solutions",
+  "metaDescription": "The Meanwell LRS-150-24 is a reliable, cost-effective 150W 24V power supply. Features a compact 1U profile, high efficiency, and full protection.",
+  "published": true,
+  "shortDescription": "The MEAN WELL LRS-150 series is a highly reliable and cost-effective single-output enclosed power supply. Designed for a wide range of industrial and automation applications, the LRS-150 offers excellent performance, high efficiency, and a compact design, making it an ideal choice for space-constrained installations. With various output voltage options and comprehensive protection features, the LRS-150 ensures stable and safe power delivery for your critical systems.",
+  "description_points": [
+    "Ultra compact & 1U low profile for easy installation",
+    "Very low no laod power consumption ~ ❮.75W",
+    "300V AC input surge protection",
+    "Most economical model | Non - PFC",
+    "High Reliability | High Efficiency",
+    "Cooling by Free Air Convection",
+    "LED Power-On Indicator"
+  ],
+  "price": 19.99,
+  "isFeatured": true,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/power-supplies/lrs-150-24-600.jpg",
+      "alt": "MEANWELL® LRS power supplies - 150-24 image 1"
+    }
+  ],
+  "highlights": [],
+  "specifications": [
+    { "name": "Brand", "value": "Meanwell" },
+    { "name": "AC Input Voltage", "value": "230V AC" },
+    { "name": "Rated Power", "value": "150W (156W)" },
+    { "name": "Voltage", "value": "24V DC" },
+    { "name": "Output", "value": "6.5A" },
+    { "name": "EMC Emission", "value": "Compliance to EN55032 Class B, EN61000-3-2,-3" },
+    { "name": "Overload Protection", "value": "105% ~ 150% of rated output power" },
+    { "name": "Overvoltage Protection", "value": "115% ~ 135% of rated output voltage, shut down o/p" },
+    { "name": "Short Circuit Protection", "value": "Hiccup mode, recovers automatically after fault removal" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Working Temperature", "value": "-20 ~ +70°C (refer to derating curve)" },
+    { "name": "Material", "value": "Steel" },
+    { "name": "Dimensions (L x W x H)", "value": "159x97x30" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/power-supplies/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/power-supplies/flexible-led-strip-compliance.pdf"
+    }
+  ]
+}

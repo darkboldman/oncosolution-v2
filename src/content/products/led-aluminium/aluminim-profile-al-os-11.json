@@ -1,0 +1,62 @@
+{
+  "id": "aluminim-profile-al-os-11",
+  "slug": "aluminim-profile-al-os-11",
+  "category_id": "led-aluminium",
+  "category": "LED Aluminium",
+  "name": "Aluminim Profile - AL- OS - 11",
+  "metaTitle": "Pendant Aluminium LED Ring Profile (1182mm) AL-OS-11 | Onco Solutions",
+  "metaDescription": "Build large, impressive suspended ring lights with the DALUX® AL-OS-11 aluminium profile (1182.60mm diameter). Premium quality for statement lighting.",
+  "published": true,
+  "shortDescription": "DALUX® LED aluminium profiles are engineered for targeted lighting applications, delivering both function and style. Choose between standalone profiles with diffusers or pre-assembled options featuring integrated LED linear strips for quick and effortless installation. To complete your setup, a full range of accessories — suspension links — are available to suit any installation need.",
+  "description_points": [
+    "Excruted from high quality alumminium stock",
+    "Purpose designed extusions for specialised applications",
+    "Sturdy profile with correct gauge for application",
+    "Enhanced heat management increase LED light quality & life",
+    "Correct installation accessories for application",
+    "Custom color options available - MOQ & Lead times apply"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/led-aluminium/aluminium--cross--section--09-10-11.png",
+      "alt": "Aluminim Profile - AL- OS - 11 image 1"
+    },
+    {
+      "src": "/images/products/led-aluminium/600mm-900mm-1200mm-Black-White-Pendant-Aluminium-LED-Profile-for-LED-Ring-Light.jpg",
+      "alt": "Aluminim Profile - AL- OS - 11 image 2"
+    }
+  ],
+  "highlights": [
+    { "icon": "square_foot", "text": "Range of Diameters" },
+    { "icon": "warehouse", "text": "Local Stocks" },
+    { "icon": "workspace_premium", "text": "Premium Quality" },
+    { "icon": "palette", "text": "Colour Options" }
+  ],
+  "specifications": [
+    { "name": "Diameter", "value": "1182.60 mm" },
+    { "name": "Width", "value": "12.00 mm" },
+    { "name": "Height", "value": "30.00 mm" },
+    { "name": "LED Width", "value": "10.50 mm (Max)" },
+    { "name": "Diffuser", "value": "PC-Milky/Frosted" },
+    { "name": "Accessories", "value": "3pcs Hanging Wire" },
+    { "name": "Installation", "value": "Suspended" },
+    { "name": "Material", "value": "Aluminium | Polycarbonate" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/led-aluminium/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/led-aluminium/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/led-aluminium/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "madrix-nebula-led-dmx-pixel-controller",
+  "slug": "madrix-nebula-led-dmx-pixel-controller",
+  "category_id": "dmx-controllers",
+  "category": "DMX Controllers",
+  "name": "Madrix® Nebula LED DMX Pixel Controller",
+  "metaTitle": "Madrix® Nebula LED DMX Pixel Controller | Onco Solutions",
+  "metaDescription": "Explore the Madrix® Nebula — a powerful LED DMX pixel controller supporting Art-Net and sACN over Ethernet or USB. Ideal for pixel-perfect LED installations.",
+  "published": true,
+  "shortDescription": "The MADRIX NEBULA is your gateway to breathtaking LED pixel installations. This advanced SPI decoder connects directly to your LEDs, delivering high-quality signals over Ethernet or USB for seamless, vibrant visuals.",
+  "description_points": [
+    "Upto pixel perfect control of LED lights",
+    "Ethernet network or USB data communication",
+    "Quality output of 8 universes",
+    "License supports lifetime upgrades",
+    "Developed & made in Germany",
+    "Compatible with wide range of LED digital lights",
+    "produces image quality display"
+  ],
+  "price": 19.99,
+  "isFeatured": true,
+  "stockStatus": "Order on demand",
+  "images": [
+    {
+      "src": "/images/products/dmx-controllers/madrix-nebula.jpg",
+      "alt": "Madrix® Nebula LED DMX Pixel Controller image 1"
+    },
+    {
+      "src": "/images/products/dmx-controllers/madrix-nebula-pixel-led-driver-DIN-mount.jpg",
+      "alt": "Madrix® Nebula LED DMX Pixel Controller image 2"
+    },
+    {
+      "src": "/images/products/dmx-controllers/madrix-with-2-thrnet-ports.jpg",
+      "alt": "Madrix® Nebula LED DMX Pixel Controller image 3"
+    }
+  ],
+  "highlights": [
+    { "icon": "hub", "text": "Addressable LED" },
+    { "icon": "verified", "text": "Made in Germany" },
+    { "icon": "lan", "text": "Ethernet Enabled" },
+    { "icon": "manage_accounts", "text": "Easy to Setup" }
+  ],
+  "specifications": [
+    { "name": "Light Source", "value": "LED" },
+    { "name": "Data Output", "value": "8 x 512 Channels SPI TTL" },
+    { "name": "Maximum Output/Port", "value": "680 : RGB LEDs, 512 : RGBW LEDs, 2048 : 1-Channel LEDs" },
+    { "name": "Ports", "value": "2 x Ports(4-Pin)" },
+    { "name": "Ethernet Switch", "value": "1024 Unicast MAC Addresses" },
+    { "name": "Ethernet", "value": "2 x RJ45, Auto MDI-X, Daisy-Chain Support, 10/100 Mbit/S" },
+    { "name": "Network Protocols", "value": "Art-Net (1,2,3,4, incl. ArtSync) Streaming ACN (sACN / ANSI E1.31)" },
+    { "name": "USB", "value": "1 x Port USB 2.0 Type-B, Female Socket" },
+    { "name": "Weight", "value": "110g" },
+    { "name": "Dimension (mm)", "value": "90 x 70 x 46" },
+    { "name": "Installation", "value": "35mm DIN-rails | Wall Mount" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Certificates", "value": "CE, EAC, FCC, RoHS" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/dmx-controllers/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/dmx-controllers/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/dmx-controllers/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

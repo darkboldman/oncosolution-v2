@@ -1,0 +1,67 @@
+{
+  "id": "schneider-pir-occupancy-sensor-surface",
+  "slug": "schneider-pir-occupancy-sensor-surface",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "Schneider® PIR occupancy sensors - Surface",
+  "metaTitle": "Schneider® Surface-Mount PIR Occupancy Sensor | Onco Solutions",
+  "metaDescription": "Surface-mounted PIR occupancy sensor from Schneider Electric. Offers wide coverage and reliable sensitivity for eco-friendly automated lighting control.",
+  "published": true,
+  "shortDescription": "Our Microwave Motion Sensors are designed for precision, offering highly sensitive and reliable motion detection. Unlike traditional infrared sensors, microwave sensors use high-frequency electromagnetic waves to detect movement, providing greater accuracy, wider coverage, and improved performance in challenging environments.",
+  "description_points": [
+    "PIR Occupancy detection",
+    "15° adjustable sensor area increments",
+    "Affordable quality product",
+    "Safety certified product",
+    "Compact design"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/sensors/Argus-motion-sensors-surface.jpg",
+      "alt": "Schneider® PIR occupancy sensors - Surface image 1"
+    },
+    {
+      "src": "/images/products/sensors/argus-occupancy-sensor.png",
+      "alt": "Schneider® PIR occupancy sensors - Surface image 2"
+    }
+  ],
+  "highlights": [
+    { "icon": "sensor_occupied", "text": "Reliable Sensitivity" },
+    { "icon": "crop_landscape", "text": "Wide Coverage" },
+    { "icon": "energy_savings_leaf", "text": "Eco Friendly" },
+    { "icon": "compress", "text": "Compact Design" }
+  ],
+  "specifications": [
+    { "name": "Detection Area", "value": "Radius:7m | Height:2.5m" },
+    { "name": "Brand", "value": "Schneider" },
+    { "name": "Frequency", "value": "N/A" },
+    { "name": "Detection Capability", "value": "Open Spaces" },
+    { "name": "Input capability", "value": "Push-Button, Electonic Insert" },
+    { "name": "Input", "value": "230V AC 50Hz" },
+    { "name": "Detection Time", "value": "0.5 ∼ 3ms" },
+    { "name": "function", "value": "On | Off control On | Off" },
+    { "name": "Detection Angle∢", "value": "Ceiling Mount: 0°-360°" },
+    { "name": "Hold Time", "value": "CH-1: 10s-30min | CH-2:N/A" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Output Current", "value": "10A" },
+    { "name": "Dimension", "value": "18x14.2x10mm" },
+    { "name": "Material", "value": "Polycarbonate" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "light-sensors-day-light-sensors-merrytek",
+  "slug": "light-sensors-day-light-sensors-merrytek",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "Light sensors | Day light sensors",
+  "metaTitle": "Merrytek Daylight Sensor for Smart Lighting Control | Onco Solutions",
+  "metaDescription": "Automate your lighting with the Merrytek daylight sensor. Simple, efficient, and reliable control based on ambient light levels for energy savings.",
+  "published": true,
+  "shortDescription": "Automatically switch street lights, garden lights, shop windows, and displays based on ambient light levels. The SKS-100 uses an external sensor to monitor brightness and activates lighting according to your set threshold — simple, efficient, and reliable.",
+  "description_points": [
+    "Automatic light control based on ambient brightness",
+    "Ideal for outdoor and commercial applications",
+    "Easy setting of switching levels directly on the device",
+    "Energy-saving and weather-resistant design",
+    "Control input for additional control",
+    "Adjustable time delay to eliminate short term fluctuation in illumination",
+    "Surface or DIN rail mount"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "Order on demand",
+  "images": [
+    {
+      "src": "/images/products/sensors/merrytek-daylight-sensor-ms02.jpg",
+      "alt": "Light sensors | Day light sensors image 1"
+    },
+    {
+      "src": "/images/products/sensors/merrytek-daylight-sensor-ms02-sideview.jpg",
+      "alt": "Light sensors | Day light sensors image 2"
+    }
+  ],
+  "highlights": [],
+  "specifications": [
+    { "name": "Detection", "value": "Light intensity" },
+    { "name": "Brand", "value": "Merrytek" },
+    { "name": "Function", "value": "On - Off Control" },
+    { "name": "Intensity Range", "value": "N/A" },
+    { "name": "No of Terminals", "value": "1 x Input | 1 x Output" },
+    { "name": "Switch On", "value": "2|10|25|50|100|150|200" },
+    { "name": "Dimension", "value": "50x36x23 mm" },
+    { "name": "Waterproof Rating", "value": "IP20" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "light-sensors-day-light-sensors-elko",
+  "slug": "light-sensors-day-light-sensors-elko",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "Light sensors | Day light sensors",
+  "metaTitle": "Elko Daylight Sensor for Automatic Lighting | Onco Solutions",
+  "metaDescription": "The Elko daylight sensor automates lighting control based on ambient brightness. Ideal for commercial and outdoor use, with adjustable levels and time delay.",
+  "published": true,
+  "shortDescription": "Automatically switch street lights, garden lights, shop windows, and displays based on ambient light levels. The SKS-100 uses an external sensor to monitor brightness and activates lighting according to your set threshold — simple, efficient, and reliable.",
+  "description_points": [
+    "Automatic light control based on ambient brightness",
+    "Ideal for outdoor and commercial applications",
+    "Easy setting of switching levels directly on the device",
+    "Energy-saving and weather-resistant design",
+    "Control input for additional control",
+    "Adjustable time delay to eliminate short term fluctuation in illumination",
+    "Surface or DIN rail mount"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "Order on demand",
+  "images": [
+    {
+      "src": "/images/products/sensors/elko-twilight-sensor.jpg",
+      "alt": "Light sensors | Day light sensors image 1"
+    },
+    {
+      "src": "/images/products/sensors/elko-twilight-sensor-module.jpg",
+      "alt": "Light sensors | Day light sensors image 2"
+    }
+  ],
+  "highlights": [],
+  "specifications": [
+    { "name": "Detection", "value": "Light intensity" },
+    { "name": "Brand", "value": "Elko" },
+    { "name": "Function", "value": "On - Off Control" },
+    { "name": "Intensity Range", "value": "Set 1: 1 - 100Lux | Set 2:100 - 50,000Lux" },
+    { "name": "No of Terminals", "value": "1 x Changeover(AgSnO2)" },
+    { "name": "Dimension", "value": "90x17.6x64 mm" },
+    { "name": "Waterproof Rating", "value": "Module:IP20 | Sensor:IP44" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

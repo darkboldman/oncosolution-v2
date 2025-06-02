@@ -1,0 +1,55 @@
+{
+  "id": "pir-proximity-wardrobe-sensor-merrytek",
+  "slug": "pir-proximity-wardrobe-sensor-merrytek",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "PIR Proximity Wardrobe Sensor - Merrytek",
+  "metaTitle": "Merrytek PIR Proximity Sensor for Wardrobes | Onco Solutions",
+  "metaDescription": "A smart, hands-free lighting solution for wardrobes and cabinets. The Merrytek PIR proximity sensor offers convenient, energy-saving illumination.",
+  "published": true,
+  "shortDescription": "Discover a smarter way to light your wardrobes, cabinets, and closets with the Merrytek PIR Proximity Wardrobe Sensor. Designed with precision and convenience in mind, this sensor offers effortless, hands-free illumination the moment you reach for your belongings — and powers down automatically to save energy when no longer needed.",
+  "description_points": [
+    "Motion-Activated: Lights turn on automatically when you open your wardrobe.",
+    "Energy Efficient: Lights switch off after a set time without movement.",
+    "Easy Installation: Compact and discreet design fits neatly inside wardrobes, cabinets, and closets.",
+    "Smart Sensitivity: Advanced PIR technology ensures accurate motion detection with minimal false triggers.",
+    "Customizable Timing: Set delay times according to your preference."
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/sensors/merrytek-ir-proximity-sensor.jpg",
+      "alt": "PIR Proximity Wardrobe Sensor - Merrytek image 1"
+    },
+    {
+      "src": "/images/products/sensors/merrytek-ir-proximity-sensor-control.jpg",
+      "alt": "PIR Proximity Wardrobe Sensor - Merrytek image 2"
+    }
+  ],
+  "highlights": [],
+  "specifications": [
+    { "name": "Detection", "value": "Proximity" },
+    { "name": "Brand", "value": "Merrytek" },
+    { "name": "Function", "value": "On - Off Control" },
+    { "name": "Sensing Distance", "value": "3cm -8cm" },
+    { "name": "Installation", "value": "Recessed" },
+    { "name": "Waterproof Rating", "value": "IP20" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

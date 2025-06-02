@@ -1,0 +1,52 @@
+{
+  "id": "pir-motion-wardrobe-sensor-merrytek",
+  "slug": "pir-motion-wardrobe-sensor-merrytek",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "PIR Motion Wardrobe Sensor - Merrytek",
+  "metaTitle": "Merrytek PIR Motion Sensor for Wardrobes & Cabinets | Onco Solutions",
+  "metaDescription": "Effortless, motion-activated lighting for your wardrobe or cabinet. The Merrytek PIR sensor is compact, easy to install, and energy-efficient.",
+  "published": true,
+  "shortDescription": "Open your wardrobe — lights turn on automatically Close it — lights turn off. Save energy and enjoy effortless, motion-activated lighting with our compact PIR sensor. Easy to install. Smart. Efficient.",
+  "description_points": [
+    "Motion-Activated: Lights turn on automatically when you open your wardrobe.",
+    "Energy Efficient: Lights switch off after a set time without movement.",
+    "Easy Installation: Compact and discreet design fits neatly inside wardrobes, cabinets, and closets.",
+    "Smart Sensitivity: Advanced PIR technology ensures accurate motion detection with minimal false triggers.",
+    "Customizable Timing: Set delay times according to your preference."
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/sensors/merrytek-motion-pir-cupboard-sensor.png",
+      "alt": "PIR Motion Wardrobe Sensor - Merrytek image 1"
+    }
+  ],
+  "highlights": [],
+  "specifications": [
+    { "name": "Detection", "value": "Motion" },
+    { "name": "Brand", "value": "Merrytek" },
+    { "name": "Function", "value": "On - Off Control" },
+    { "name": "Sensing Distance", "value": "100 cm" },
+    { "name": "Installation", "value": "Surface" },
+    { "name": "Dimension", "value": "50x36x23 mm" },
+    { "name": "Waterproof Rating", "value": "IP20" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

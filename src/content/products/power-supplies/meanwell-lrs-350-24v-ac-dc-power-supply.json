@@ -1,0 +1,70 @@
+{
+  "id": "meanwell-lrs-350-24v-ac-dc-power-supply",
+  "slug": "meanwell-lrs-350-24v-ac-dc-power-supply",
+  "category_id": "power-supplies",
+  "category": "Power Supplies",
+  "name": "Meanwell LRS-350-24V AC/DC Power Supply",
+  "metaTitle": "Meanwell LRS-350-24V AC/DC Power Supply | Onco Solutions",
+  "metaDescription": "Discover the Meanwell LRS-350-24V, a compact, high-efficiency 350W power supply ideal for LED lighting and industrial control systems. Features 89% efficiency and full protection.",
+  "published": true,
+  "shortDescription": "The MEANWELL LRS-350 series is a compact, high-efficiency switching power supply designed for industrial applications. With 89% typical efficiency, full protection features, and a 1U low-profile design, it's ideal for LED lighting, industrial control systems, and telecommunications equipment.",
+  "description_points": [
+    "Ultra-compact 1U low-profile design for space-constrained installations",
+    "Very low no-load power consumption (<0.75W)",
+    "300V AC input surge protection",
+    "Built-in over-voltage, over-load, and short-circuit protection",
+    "Cooling by free air convection (no fan required)",
+    "Complies with safety standards IEC/EN/UL 62368-1"
+  ],
+  "price": 62.5,
+  "isFeatured": true,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-front.jpg",
+      "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 1"
+    },
+    {
+      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-side.jpg",
+      "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 2"
+    },
+    {
+      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-diagram.png",
+      "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 3"
+    }
+  ],
+  "highlights": [
+    { "icon": "bolt", "text": "Surge Protection" },
+    { "icon": "verified", "text": "UL Certified" },
+    { "icon": "battery_full", "text": "89% Efficiency" },
+    { "icon": "settings", "text": "Industrial Grade" }
+  ],
+  "specifications": [
+    { "name": "Input Voltage", "value": "90-264V AC" },
+    { "name": "Output Voltage", "value": "24V DC" },
+    { "name": "Output Current", "value": "14.6A" },
+    { "name": "Output Power", "value": "350W" },
+    { "name": "Efficiency", "value": "89% (Typical)" },
+    { "name": "Protections", "value": "Over Voltage/Over Load/Short Circuit" },
+    { "name": "Cooling Method", "value": "Free Air Convection" },
+    { "name": "Dimensions", "value": "199*99*38mm (L*W*H)" },
+    { "name": "Weight", "value": "0.68kg" },
+    { "name": "Certifications", "value": "UL 62368-1, CE, CB" },
+    { "name": "Operating Temp", "value": "-30°C to +70°C" },
+    { "name": "MTBF", "value": ">300,000 hrs" }
+  ],
+  "documents": [
+    {
+      "name": "Datasheet",
+      "file": "/documents/power-supplies/meanwell-lrs-350-datasheet.pdf"
+    },
+    {
+      "name": "Safety Certificate",
+      "file": "/documents/power-supplies/meanwell-lrs-350-certificate.pdf"
+    },
+    {
+      "name": "Installation Guide",
+      "file": "/documents/power-supplies/meanwell-lrs-350-installation.pdf"
+    }
+  ]
+}

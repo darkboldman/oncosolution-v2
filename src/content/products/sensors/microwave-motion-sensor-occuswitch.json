@@ -1,0 +1,67 @@
+{
+  "id": "microwave-motion-sensor-occuswitch",
+  "slug": "microwave-motion-sensor-occuswitch",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "Microwave motion Sensor-Occuswitch",
+  "metaTitle": "Philips Occuswitch Microwave Motion Sensor | Onco Solutions",
+  "metaDescription": "The Philips Occuswitch provides reliable motion detection for open spaces. An affordable, compact, and energy-efficient solution for automated lighting control.",
+  "published": true,
+  "shortDescription": "Our Microwave Motion Sensors are designed for precision, offering highly sensitive and reliable motion detection. Unlike traditional infrared sensors, microwave sensors use high-frequency electromagnetic waves to detect movement, providing greater accuracy, wider coverage, and improved performance in challenging environments.",
+  "description_points": [
+    "Reliable accurate detection of motion",
+    "Very low no laod power consumption",
+    "Affordable quality product",
+    "Safety certified product",
+    "Compact design"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/sensors/philips-occuswitch-occupancy-sensor.jpg",
+      "alt": "Microwave motion Sensor-Occuswitch image 1"
+    },
+    {
+      "src": "/images/products/sensors/philips-occuswitch-occupancy-sensor-back.jpg",
+      "alt": "Microwave motion Sensor-Occuswitch image 2"
+    }
+  ],
+  "highlights": [
+    { "icon": "sensor_occupied", "text": "Ultra Sensitive" },
+    { "icon": "crop_landscape", "text": "Wide Coverage" },
+    { "icon": "energy_savings_leaf", "text": "Eco Friendly" },
+    { "icon": "compress", "text": "Compact Design" }
+  ],
+  "specifications": [
+    { "name": "Detection Area", "value": "5mx5mx4m" },
+    { "name": "Brand", "value": "Phillips" },
+    { "name": "Frequency", "value": "N/A" },
+    { "name": "Detection Capability", "value": "Open Spaces" },
+    { "name": "Inrush Current", "value": "60A 230V AC" },
+    { "name": "Input", "value": "230V AC 50Hz" },
+    { "name": "Detection Time", "value": "0.5 ∼ 3ms" },
+    { "name": "function", "value": "On | Off control On | Off" },
+    { "name": "Detection Angle∢", "value": "Wall Mount: 150° Ceiling Mount: 360°" },
+    { "name": "Hold Time", "value": "CH-1:5s-30min | CH-2:N/A" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Output Current", "value": "6A" },
+    { "name": "Dimension", "value": "95x40mm" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

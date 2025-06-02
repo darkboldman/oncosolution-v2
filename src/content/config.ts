@@ -19,8 +19,40 @@ const blogCollection = defineCollection({
     // when using content collections and a dynamic route page.
   }),
 });
+// product collection
+const productCollection = defineCollection({
+  type: 'data', // 👈 this is required for .json/.yaml/.ts content
+  schema: z.object({
+    id: z.string(),
+    slug: z.string(),
+    category_id: z.string(),
+    name: z.string(),
+    shortDescription: z.string(),
+    description_points: z.array(z.string()),
+    price: z.number(),
+    isFeatured: z.boolean().default(false),
+    stockStatus: z.string(),
+    images: z.array(z.object({
+      src: z.string(),
+      alt: z.string()
+    })),
+    highlights: z.array(z.object({
+      icon: z.string(),
+      text: z.string()
+    })),
+    specifications: z.array(z.object({
+      name: z.string(),
+      value: z.string()
+    })),
+    documents: z.array(z.object({
+      name: z.string(),
+      file: z.string()
+    })).optional()
+  })
+});
 
 // Export a `collections` object to register your collections
 export const collections = {
-  'blog': blogCollection,
+  blog: blogCollection,
+  products: productCollection
 };

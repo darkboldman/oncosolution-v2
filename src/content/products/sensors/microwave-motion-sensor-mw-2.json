@@ -1,0 +1,67 @@
+{
+  "id": "microwave-motion-sensor-mw-2",
+  "slug": "microwave-motion-sensor-mw-2",
+  "category_id": "sensors",
+  "category": "Sensors",
+  "name": "Microwave motion Sensor-MW-2",
+  "metaTitle": "Microwave Motion Sensor MW-2 | Merrytek | Onco Solutions",
+  "metaDescription": "The Merrytek MW-2 offers precise, reliable microwave motion detection. Its compact design provides wide coverage and is ideal for automated lighting control.",
+  "published": true,
+  "shortDescription": "Our Microwave Motion Sensors are designed for precision, offering highly sensitive and reliable motion detection. Unlike traditional infrared sensors, microwave sensors use high-frequency electromagnetic waves to detect movement, providing greater accuracy, wider coverage, and improved performance in challenging environments.",
+  "description_points": [
+    "Reliable accurate detection of motion",
+    "Very low no laod power consumption",
+    "Affordable quality product",
+    "Safety certified product",
+    "Compact design"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/images/products/sensors/merytec-microwave-sensor-mc034s-back.jpg",
+      "alt": "Microwave motion Sensor-MW-2 image 1"
+    },
+    {
+      "src": "/images/products/sensors/merytec-microwave-sensor-mc034s.jpg",
+      "alt": "Microwave motion Sensor-MW-2 image 2"
+    }
+  ],
+  "highlights": [
+    { "icon": "sensor_occupied", "text": "Ultra Sensitive" },
+    { "icon": "crop_landscape", "text": "Wide Coverage" },
+    { "icon": "energy_savings_leaf", "text": "Eco Friendly" },
+    { "icon": "compress", "text": "Compact Design" }
+  ],
+  "specifications": [
+    { "name": "Detection Area", "value": "10mx4m" },
+    { "name": "Brand", "value": "Merrytek" },
+    { "name": "Frequency", "value": "5.8GHz ±75MHz | ISM Wave Band" },
+    { "name": "Detection Capability", "value": "Plastic | Glass | Non-Metal Thin material" },
+    { "name": "Inrush Current", "value": "60A 230V AC" },
+    { "name": "Input", "value": "230V AC 50Hz" },
+    { "name": "Detection Time", "value": "0.5 ∼ 3ms" },
+    { "name": "function", "value": "On | Off control On | Off" },
+    { "name": "Detection Angle∢", "value": "Wall Mount: 150° Ceiling Mount: 360°" },
+    { "name": "Hold Time", "value": "CH-1:5s-10min | CH-2:5s-20min" },
+    { "name": "Waterproof Rating", "value": "IP20 (Indoor Use)" },
+    { "name": "Output Current", "value": "10A" },
+    { "name": "Dimension", "value": "82x36.5x25.5 mm" },
+    { "name": "Material", "value": "Plastic" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/sensors/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/sensors/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/sensors/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}
