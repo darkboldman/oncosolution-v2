@@ -22,11 +22,11 @@
   "stockStatus": "Order on demand",
   "images": [
     {
-      "src": "/images/products/sensors/elko-twilight-sensor.jpg",
+      "src": "/src/assets/images/products/sensors/elko-twilight-sensor.jpg",
       "alt": "Light sensors | Day light sensors image 1"
     },
     {
-      "src": "/images/products/sensors/elko-twilight-sensor-module.jpg",
+      "src": "/src/assets/images/products/sensors/elko-twilight-sensor-module.jpg",
       "alt": "Light sensors | Day light sensors image 2"
     }
   ],

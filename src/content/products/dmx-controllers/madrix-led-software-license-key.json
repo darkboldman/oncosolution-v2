@@ -22,15 +22,15 @@
   "stockStatus": "Order on demand",
   "images": [
     {
-      "src": "/images/products/dmx-controllers/madrix-software-package-box.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/madrix-software-package-box.jpg",
       "alt": "Madrix® LED software License Key image 1"
     },
     {
-      "src": "/images/products/dmx-controllers/madrix-software-usb.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/madrix-software-usb.jpg",
       "alt": "Madrix® LED software License Key image 2"
     },
     {
-      "src": "/images/products/dmx-controllers/madrix_5_software.png",
+      "src": "/src/assets/images/products/dmx-controllers/madrix_5_software.png",
       "alt": "Madrix® LED software License Key image 3"
     }
   ],

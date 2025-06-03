@@ -1,0 +1,71 @@
+---
+// src/pages/products/[...page].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { GetStaticPathsOptions } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProductCategoryFilterBar from '../../components/ProductCategoryFilterBar.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import categories from '../../data/categories.json';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allProducts = await getCollection('products');
+
+  const sortedProducts = allProducts.sort((a: CollectionEntry<'products'>, b: CollectionEntry<'products'>) => {
+    if (a.data.isFeatured && !b.data.isFeatured) return -1;
+    if (!a.data.isFeatured && b.data.isFeatured) return 1;
+    return a.data.name.localeCompare(b.data.name);
+  });
+
+  // When using a [...rest] route, Astro's paginate function handles the optional page segment automatically.
+  return paginate(sortedProducts, { pageSize: 12 });
+}
+
+const { page } = Astro.props;
+
+const categorySlugMap = new Map(categories.map(cat => [cat.id, cat.id]));
+
+const metaDescription = `Browse our wide range of smart lighting, automation, and control system products. Page ${page.currentPage} of ${page.lastPage}.`;
+---
+<BaseLayout title={`Our Products (Page ${page.currentPage}) | Onco Solutions`}>
+  <meta slot="head" name="description" content={metaDescription} />
+
+  <PageHeader 
+    title="Our Products"
+    subtitle="High-quality solutions for smart lighting, DMX control, and building automation."
+  />
+
+  <ProductCategoryFilterBar currentFilterId="all" />
+
+  <main class="product-grid-section">
+    <div class="container">
+      {page.data.length > 0 ? (
+        <div class="product-grid">
+          {page.data.map((product: CollectionEntry<'products'>) => (
+            <ProductCard 
+              product={product} 
+              categorySlug={categorySlugMap.get(product.data.category_id) || 'uncategorized'} 
+            />
+          ))}
+        </div>
+      ) : (
+        <p>No products found.</p>
+      )}
+    </div>
+  </main>
+
+  <Pagination page={page} base="/products" />
+
+</BaseLayout>
+
+<style>
+  .product-grid-section {
+    padding: 2rem 0;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+</style>

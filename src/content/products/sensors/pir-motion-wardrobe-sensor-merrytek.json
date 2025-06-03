@@ -20,7 +20,7 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/merrytek-motion-pir-cupboard-sensor.png",
+      "src": "/src/assets/images/products/sensors/merrytek-motion-pir-cupboard-sensor.png",
       "alt": "PIR Motion Wardrobe Sensor - Merrytek image 1"
     }
   ],

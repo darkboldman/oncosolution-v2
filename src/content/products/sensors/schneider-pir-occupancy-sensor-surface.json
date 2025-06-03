@@ -20,11 +20,11 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/Argus-motion-sensors-surface.jpg",
+      "src": "/src/assets/images/products/sensors/Argus-motion-sensors-surface.jpg",
       "alt": "Schneider® PIR occupancy sensors - Surface image 1"
     },
     {
-      "src": "/images/products/sensors/argus-occupancy-sensor.png",
+      "src": "/src/assets/images/products/sensors/argus-occupancy-sensor.png",
       "alt": "Schneider® PIR occupancy sensors - Surface image 2"
     }
   ],

@@ -22,7 +22,7 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/power-supplies/lrs-150-24-600.jpg",
+      "src": "/src/assets/images/products/power-supplies/lrs-150-24-600.jpg",
       "alt": "MEANWELL® LRS power supplies - 150-24 image 1"
     }
   ],

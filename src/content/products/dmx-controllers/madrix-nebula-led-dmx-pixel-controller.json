@@ -22,15 +22,15 @@
   "stockStatus": "Order on demand",
   "images": [
     {
-      "src": "/images/products/dmx-controllers/madrix-nebula.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/madrix-nebula.jpg",
       "alt": "Madrix® Nebula LED DMX Pixel Controller image 1"
     },
     {
-      "src": "/images/products/dmx-controllers/madrix-nebula-pixel-led-driver-DIN-mount.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/madrix-nebula-pixel-led-driver-DIN-mount.jpg",
       "alt": "Madrix® Nebula LED DMX Pixel Controller image 2"
     },
     {
-      "src": "/images/products/dmx-controllers/madrix-with-2-thrnet-ports.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/madrix-with-2-thrnet-ports.jpg",
       "alt": "Madrix® Nebula LED DMX Pixel Controller image 3"
     }
   ],

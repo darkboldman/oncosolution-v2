@@ -20,11 +20,11 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/merrytek-ir-proximity-sensor.jpg",
+      "src": "/src/assets/images/products/sensors/merrytek-ir-proximity-sensor.jpg",
       "alt": "PIR Proximity Wardrobe Sensor - Merrytek image 1"
     },
     {
-      "src": "/images/products/sensors/merrytek-ir-proximity-sensor-control.jpg",
+      "src": "/src/assets/images/products/sensors/merrytek-ir-proximity-sensor-control.jpg",
       "alt": "PIR Proximity Wardrobe Sensor - Merrytek image 2"
     }
   ],

@@ -22,11 +22,11 @@
   "stockStatus": "Order on demand",
   "images": [
     {
-      "src": "/images/products/sensors/merrytek-daylight-sensor-ms02.jpg",
+      "src": "/src/assets/images/products/sensors/merrytek-daylight-sensor-ms02.jpg",
       "alt": "Light sensors | Day light sensors image 1"
     },
     {
-      "src": "/images/products/sensors/merrytek-daylight-sensor-ms02-sideview.jpg",
+      "src": "/src/assets/images/products/sensors/merrytek-daylight-sensor-ms02-sideview.jpg",
       "alt": "Light sensors | Day light sensors image 2"
     }
   ],

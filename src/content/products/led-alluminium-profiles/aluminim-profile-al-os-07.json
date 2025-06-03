@@ -1,0 +1,62 @@
+{
+  "id": "aluminim-profile-al-os-07",
+  "slug": "aluminim-profile-al-os-07",
+  "category_id": "led-alluminium-profiles",
+  "category": "LED Aluminium",
+  "name": "Aluminim Profile - AL- OS - 07",
+  "metaTitle": "Aluminium Profile AL-OS-07 for LED Strips | Onco Solutions",
+  "metaDescription": "Explore the robust DALUX® aluminium profile AL-OS-07. A purpose-designed extrusion for demanding lighting applications, offering superior quality and style.",
+  "published": true,
+  "shortDescription": "DALUX® LED aluminium profiles are engineered for targeted lighting applications, delivering both function and style. Choose between standalone profiles with diffusers or pre-assembled options featuring integrated LED linear strips for quick and effortless installation. To complete your setup, a full range of accessories — including end caps, mounting brackets, and suspension links — are available to suit any installation need.",
+  "description_points": [
+    "Excruted from high quality alumminium stock",
+    "Purpose designed extusions for specialised applications",
+    "Sturdy profile with correct gauge for application",
+    "Enhanced heat management increase LED light quality & life",
+    "Correct installation accessories for application",
+    "Custom color options available - MOQ & Lead times apply"
+  ],
+  "price": 19.99,
+  "isFeatured": false,
+  "stockStatus": "In stock",
+  "images": [
+    {
+      "src": "/src/assets/images/products/led-aluminium/aluminium--cross--section--07.png",
+      "alt": "Aluminim Profile - AL- OS - 07 image 1"
+    },
+    {
+      "src": "/src/assets/images/products/led-aluminium/AL-OS-07-image.jpg",
+      "alt": "Aluminim Profile - AL- OS - 07 image 2"
+    }
+  ],
+  "highlights": [
+    { "icon": "straighten", "text": "Custom Lengths" },
+    { "icon": "warehouse", "text": "Local Stocks" },
+    { "icon": "workspace_premium", "text": "Premium Quality" },
+    { "icon": "palette", "text": "Colour Options" }
+  ],
+  "specifications": [
+    { "name": "Length", "value": "2 meters" },
+    { "name": "Width", "value": "50.00 mm" },
+    { "name": "Height", "value": "75.00 mm" },
+    { "name": "LED Width", "value": "25.00 mm (Max)" },
+    { "name": "Diffuser", "value": "PC-Milky/Frosted" },
+    { "name": "Accessories", "value": "End Caps & Clips" },
+    { "name": "Installation", "value": "Surface/Recessed" },
+    { "name": "Material", "value": "Aluminium | Polycarbonate" }
+  ],
+  "documents": [
+    {
+      "name": "Product Brochure",
+      "file": "/documents/led-aluminium/flexible-led-strip-brochure.pdf"
+    },
+    {
+      "name": "Compliance Certificate",
+      "file": "/documents/led-aluminium/flexible-led-strip-compliance.pdf"
+    },
+    {
+      "name": "Test Report",
+      "file": "/documents/led-aluminium/flexible-led-strip-test-report.pdf"
+    }
+  ]
+}

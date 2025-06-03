@@ -20,7 +20,7 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/merytec-microwave-sensor.jpg",
+      "src": "/src/assets/images/products/sensors/merytec-microwave-sensor.jpg",
       "alt": "Microwave motion Sensor-MW-1 image 1"
     }
   ],

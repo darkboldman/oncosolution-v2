@@ -21,15 +21,15 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-front.jpg",
+      "src": "/src/assets/images/products/power-supplies/meanwell-lrs-350-24v-front.jpg",
       "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 1"
     },
     {
-      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-side.jpg",
+      "src": "/src/assets/images/products/power-supplies/meanwell-lrs-350-24v-side.jpg",
       "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 2"
     },
     {
-      "src": "/images/products/power-supplies/meanwell-lrs-350-24v-diagram.png",
+      "src": "/src/assets/images/products/power-supplies/meanwell-lrs-350-24v-diagram.png",
       "alt": "Meanwell LRS-350-24V AC/DC Power Supply image 3"
     }
   ],

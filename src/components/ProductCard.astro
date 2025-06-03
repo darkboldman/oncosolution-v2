@@ -1,74 +1,82 @@
 ---
 // src/components/ProductCard.astro
 import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 
-// Based on your product JSON structure
-export interface Product {
-  id: string;
-  category?: string; // From the parent JSON filename or an explicit field
-  name: string;
-  shortDescription?: string;
-  price?: number;
-  featured?: "yes" | "no";
-  images: string[]; // Array of image filenames or public paths
-  slug: string; // Should be generated and added to the product object
-  imageMeta?: ImageMetadata; // For processed image from astro:assets
-}
+// --- NEW: Use import.meta.glob to import all product images ---
+// This creates a map of all images in the directory that we can look up.
+const allProductImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/products/**/*.{jpeg,jpg,png,webp,gif,svg}'
+);
 
 export interface Props {
-  product: Product;
+  product: CollectionEntry<'products'>;
+  categorySlug: string;
 }
 
-const { product } = Astro.props;
-const productDetailUrl = `/products/detail/${product.slug}`; // Link to individual product page
+const { product, categorySlug } = Astro.props;
+const { data } = product;
 
-// Use imageMeta if available (from astro:assets processing), else use first image from public path
-const imageToDisplay = product.imageMeta || (product.images && product.images.length > 0 ? product.images[0] : '/images/placeholder-product.jpg');
-const imageAltText = product.name ? `Image of ${product.name}` : "Product image";
+const productDetailUrl = `/products/${categorySlug}/${data.slug}`;
+
+// Get the path for the first image from the product's data
+const firstImageInfo = data.images && data.images.length > 0 ? data.images[0] : null;
+const imagePath = firstImageInfo ? firstImageInfo.src : null;
+
+// --- NEW: Look up the imported image metadata from our glob map ---
+let imageMetadata: ImageMetadata | undefined;
+if (imagePath && allProductImages[imagePath]) {
+  // The 'await' is needed because glob returns a promise for the module
+  const imageModule = await allProductImages[imagePath]();
+  imageMetadata = imageModule.default;
+} else if (imagePath) {
+  console.warn(`[ProductCard] Image not found for product "${data.name}" at path: ${imagePath}`);
+}
+
+const imageAltText = firstImageInfo ? firstImageInfo.alt : `Image of ${data.name}`;
 ---
 <article class="product-card">
   <a href={productDetailUrl} class="product-card-link">
     <div class="product-image-wrapper">
-      {typeof imageToDisplay === 'string' ? (
-        <img 
-          src={imageToDisplay} 
-          alt={imageAltText} 
-          class="product-image" 
-          loading="lazy" 
-          decoding="async" 
-          onerror="this.style.display='none'; const p=document.createElement('p'); p.textContent='Image missing'; this.parentNode.appendChild(p);"
-        />
-      ) : (
+      
+      {/* --- CHANGED: Use the <Image /> component if metadata exists --- */}
+      {imageMetadata ? (
         <Image
-          src={imageToDisplay}
+          src={imageMetadata}
           alt={imageAltText}
           class="product-image"
           widths={[200, 400, 600]}
           sizes="(max-width: 639px) 90vw, (max-width: 991px) 45vw, 300px"
           format="webp"
-          quality={75}
+          quality={80}
           loading="lazy"
           decoding="async"
         />
+      ) : (
+        <img 
+          src="/images/placeholder-product.jpg" 
+          alt="Placeholder product image" 
+          class="product-image"
+        />
       )}
-      {product.featured === "yes" && <span class="featured-badge">Featured</span>}
+
+      {data.isFeatured && <span class="featured-badge">Featured</span>}
     </div>
     <div class="product-info">
-      <h3 class="product-name">{product.name}</h3>
-      {product.shortDescription && <p class="product-short-description">{product.shortDescription.substring(0, 80)}...</p>}
-      {/* You can add price here if available and desired */}
-      {/* {typeof product.price === 'number' && <p class="product-price">${product.price.toFixed(2)}</p>} */}
+      <h3 class="product-name">{data.name}</h3>
+      {data.shortDescription && <p class="product-short-description">{data.shortDescription.substring(0, 80)}...</p>}
     </div>
   </a>
   <a href={productDetailUrl} class="btn btn-details-product">View Details</a>
 </article>
 
 <style>
+  /* Styles are unchanged */
   .product-card {
     background-color: var(--light-bg, #fff);
     border-radius: var(--border-radius, 8px);
-    box-shadow: var(--box-shadow, 0 4px 12px rgba(0,0,0,0.08));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -88,7 +96,7 @@ const imageAltText = product.name ? `Image of ${product.name}` : "Product image"
   }
   .product-image-wrapper {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Square images for product cards */
+    aspect-ratio: 1 / 1;
     background-color: var(--medium-gray, #eee);
     overflow: hidden;
     position: relative;
@@ -96,7 +104,7 @@ const imageAltText = product.name ? `Image of ${product.name}` : "Product image"
   .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Or 'contain' if you don't want cropping */
+    object-fit: cover;
     transition: transform 0.4s ease;
   }
   .product-card:hover .product-image {
@@ -106,7 +114,7 @@ const imageAltText = product.name ? `Image of ${product.name}` : "Product image"
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
-    background-color: var(--orange-color); /* Example accent */
+    background-color: var(--orange-color);
     color: var(--text-light);
     padding: 0.25rem 0.6rem;
     border-radius: var(--border-radius, 4px);
@@ -133,13 +141,7 @@ const imageAltText = product.name ? `Image of ${product.name}` : "Product image"
     color: var(--text-color);
     line-height: 1.5;
     margin-bottom: 0.75rem;
-    flex-grow: 1; /* Allow description to push button down */
-  }
-  .product-price {
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+    flex-grow: 1;
   }
   .btn-details-product {
     display: block;

@@ -20,11 +20,11 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/philips-occuswitch-occupancy-sensor.jpg",
+      "src": "/src/assets/images/products/sensors/philips-occuswitch-occupancy-sensor.jpg",
       "alt": "Microwave motion Sensor-Occuswitch image 1"
     },
     {
-      "src": "/images/products/sensors/philips-occuswitch-occupancy-sensor-back.jpg",
+      "src": "/src/assets/images/products/sensors/philips-occuswitch-occupancy-sensor-back.jpg",
       "alt": "Microwave motion Sensor-Occuswitch image 2"
     }
   ],

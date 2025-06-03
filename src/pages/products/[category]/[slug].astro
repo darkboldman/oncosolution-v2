@@ -1,0 +1,1139 @@
+---
+// src/pages/products/[category]/[slug].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { GetStaticPathsOptions, ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro'; // Ensure this path is correct
+import Breadcrumbs from '../../../components/Breadcrumbs.astro'; // Using our reusable component
+import allCategories from '../../../data/categories.json'; // Ensure this path is correct
+
+const allProductImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/products/**/*.{jpeg,jpg,png,webp,gif,svg}'
+);
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allProducts = await getCollection('products');
+  const categoryMap = new Map(allCategories.map(cat => [cat.id, cat]));
+  const paths = [];
+
+  for (const product of allProducts) {
+    const category = categoryMap.get(product.data.category_id);
+    if (category) {
+      paths.push({
+        params: { category: category.id, slug: product.data.slug },
+        props: { product, category },
+      });
+    }
+  }
+  return paths;
+}
+
+const { product, category } = Astro.props;
+const { data: productData } = product;
+
+// Construct Breadcrumb Items
+const breadcrumbItems = [
+  { text: "Home", href: "/" },
+  { text: "Products", href: "/products" },
+  { text: category.name, href: `/products/category/${category.id}` },
+  { text: productData.name } // No href for the current page
+];
+
+const imageGallery: { metadata: ImageMetadata; alt: string }[] = [];
+if (productData.images && productData.images.length > 0) {
+  for (const img of productData.images) {
+    if (allProductImages[img.src]) {
+      const mod = await allProductImages[img.src]();
+      imageGallery.push({ metadata: mod.default, alt: img.alt });
+    }
+  }
+}
+const mainImage = imageGallery.length > 0 ? imageGallery[0] : null;
+---
+
+<BaseLayout title={productData.name} description={productData.shortDescription}>
+  <div class="product-page">
+    {/* Modified Header Section - similar to project-detail-header */}
+    <header class="product-detail-header">
+      <div class="container">
+        <Breadcrumbs items={breadcrumbItems} />
+
+        {productData.isFeatured && ( // Corrected from productData.featured to productData.isFeatured
+          <div class="featured-product-badge">
+            Featured Product
+          </div>
+        )}
+
+        <h1 class="product-main-title">{productData.name}</h1>
+
+        <div class="product-header-meta">
+          <span class="meta-item category">
+            <strong>Category:</strong> <a href={`/products/category/${category.id}`}>{category.name}</a>
+          </span>
+          {/* Note: 'application' is not in your product schema. 
+            Add it or replace with an existing field. 
+            Example: productData.highlights?.[0]?.text 
+          */}
+          <!-- {productData.application && (
+             <span class="meta-item application"><strong>Application:</strong> {productData.application}</span>
+          )} -->
+          <span class="meta-item status"><strong>Status:</strong> {productData.stockStatus}</span>
+        </div>
+      </div>
+    </header>
+
+    {/* Main Content Area - moved product-hero inside the main container */}
+    <div class="container">
+      <div class="product-content-area"> {/* Renamed from product-hero to avoid confusion */}
+        <div class="product-gallery-section">
+          {/* Main Image with Zoom */}
+          <div class="main-image-wrapper">
+            <div class="main-image-container" id="main-image-container">
+              {mainImage && (
+                <Image 
+                  src={mainImage.metadata} 
+                  alt={mainImage.alt}
+                  widths={[400, 800, 1200]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  format="webp"
+                  class="main-product-image"
+                  id="main-product-image"
+                />
+              )}
+              <button class="zoom-btn" id="zoom-btn" aria-label="Zoom image">
+                <span class="material-symbols-outlined">zoom_in</span>
+              </button>
+            </div>
+            
+            {imageGallery.length > 1 && (
+              <div class="image-counter">
+                <span id="current-image">1</span> / {imageGallery.length}
+              </div>
+            )}
+          </div>
+
+          {imageGallery.length > 1 && (
+            <div class="thumbnail-gallery">
+              <div class="thumbnail-scroll" id="thumbnail-scroll">
+                {imageGallery.map((img, index) => (
+                  <button 
+                    class:list={["thumbnail-btn", {active: index === 0}]} 
+                    data-image-src={img.metadata.src} 
+                    data-image-alt={img.alt}
+                    data-index={index}
+                    aria-label={`View image ${index + 1}`}
+                  >
+                    <Image 
+                      src={img.metadata} 
+                      alt={`Thumbnail ${index + 1}`} 
+                      width={100} 
+                      height={100}
+                      format="webp" 
+                      quality="medium"
+                    />
+                  </button>
+                ))}
+              </div>
+              <button class="scroll-btn scroll-left" id="scroll-left" aria-label="Scroll left">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <button class="scroll-btn scroll-right" id="scroll-right" aria-label="Scroll right">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div class="product-info-sidebar">
+          {/* Product Title and Category are now in the header */}
+          {/* Stock status is also in the header, but can be repeated if desired, or styled differently here */}
+           <div class="stock-status-wrapper info-sidebar-stock"> {/* Added class for potential different styling */}
+            <div class="stock-indicator">
+              <span class="stock-dot"></span>
+              <span class="stock-text">{productData.stockStatus}</span>
+            </div>
+          </div>
+
+          <div class="product-summary">
+            <p class="short-description">{productData.shortDescription}</p>
+          </div>
+
+          {productData.highlights && productData.highlights.length > 0 && (
+            <div class="key-features">
+              <h3>Key Features</h3>
+              <ul class="features-grid">
+                {productData.highlights.map(highlight => (
+                  <li class="feature-item">
+                    <div class="feature-icon">
+                      <span class="material-symbols-outlined">{highlight.icon}</span>
+                    </div>
+                    <span class="feature-text">{highlight.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div class="action-buttons">
+            <button class="btn btn-primary">Request Quote</button>
+            <button class="btn btn-secondary">Contact Us</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabbed Content Section (HTML unchanged) */}
+      <div class="product-details-tabs">
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="description">Description</button>
+          {productData.specifications && productData.specifications.length > 0 && (
+            <button class="tab-btn" data-tab="specifications">Specifications</button>
+          )}
+          {productData.documents && productData.documents.length > 0 && (
+            <button class="tab-btn" data-tab="documents">Documents</button>
+          )}
+        </div>
+        <div class="tab-content">
+          <div class="tab-panel active" id="description-panel">
+            <div class="description-content">
+              <h3>Product Description</h3>
+              <ul class="description-points">
+                {productData.description_points.map(point => (
+                  <li class="description-point">
+                    <span class="point-icon material-symbols-outlined">check_circle</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {productData.specifications && productData.specifications.length > 0 && (
+            <div class="tab-panel" id="specifications-panel">
+              <div class="specifications-content">
+                <h3>Technical Specifications</h3>
+                <div class="specs-grid">
+                  {productData.specifications.map(spec => (
+                    <div class="spec-item">
+                      <div class="spec-label">{spec.name}</div>
+                      <div class="spec-value">{spec.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          {productData.documents && productData.documents.length > 0 && (
+            <div class="tab-panel" id="documents-panel">
+              <div class="documents-content">
+                <h3>Downloads & Documentation</h3>
+                <div class="documents-grid">
+                  {productData.documents.map(doc => (
+                    <a href={doc.file} class="document-card" download>
+                      <div class="doc-icon"><span class="material-symbols-outlined">description</span></div>
+                      <div class="doc-info">
+                        <h4>{doc.name}</h4>
+                        <span class="download-text">Click to download</span>
+                      </div>
+                      <div class="download-icon"><span class="material-symbols-outlined">download</span></div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {/* Image Lightbox Modal (HTML unchanged) */}
+    <div class="lightbox-overlay" id="lightbox-overlay">
+      <div class="lightbox-container">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox"><span class="material-symbols-outlined">close</span></button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image"><span class="material-symbols-outlined">chevron_left</span></button>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image"><span class="material-symbols-outlined">chevron_right</span></button>
+        <div class="lightbox-content">
+          <img id="lightbox-image" src="" alt="" />
+          <div class="lightbox-info"><span id="lightbox-counter"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // JAVASCRIPT IS UNCHANGED from your provided version
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainImageContainer = document.getElementById('main-image-container');
+    const mainImageEl = document.getElementById('main-product-image') as HTMLImageElement; // Renamed to avoid conflict
+    const thumbnails = document.querySelectorAll<HTMLButtonElement>('.thumbnail-btn');
+    const currentImageSpan = document.getElementById('current-image');
+    const zoomBtn = document.getElementById('zoom-btn');
+    
+    const lightboxOverlay = document.getElementById('lightbox-overlay');
+    const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    
+    let currentImageIndex = 0;
+    const imageData: Array<{src: string, alt: string}> = [];
+    
+    thumbnails.forEach((btn) => { // Removed index as it's not used directly here
+      imageData.push({
+        src: btn.dataset.imageSrc as string,
+        alt: btn.dataset.imageAlt as string
+      });
+    });
+
+    function updateMainImageDisplay() {
+      if (mainImageContainer && imageData[currentImageIndex]) {
+        // Instead of replacing the whole Astro <Image> component's output,
+        // we find the <img> tag within it or create a new one if needed.
+        let imgElement = mainImageContainer.querySelector('img#main-product-image');
+        if (!imgElement) { // Fallback if Astro's Image component output is complex
+            imgElement = document.createElement('img');
+            imgElement.id = 'main-product-image';
+            imgElement.className = 'main-product-image';
+            mainImageContainer.innerHTML = ''; // Clear previous image
+            mainImageContainer.appendChild(imgElement);
+        }
+        (imgElement as HTMLImageElement).src = imageData[currentImageIndex].src;
+        (imgElement as HTMLImageElement).alt = imageData[currentImageIndex].alt;
+      }
+    }
+
+
+    thumbnails.forEach((button) => {
+        button.addEventListener('click', () => {
+            currentImageIndex = parseInt(button.dataset.index || "0", 10);
+            updateMainImageDisplay();
+            updateThumbnailActive();
+            updateImageCounter();
+        });
+    });
+
+    function updateThumbnailActive() {
+      thumbnails.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === currentImageIndex);
+      });
+    }
+
+    function updateImageCounter() {
+      if (currentImageSpan) {
+        currentImageSpan.textContent = (currentImageIndex + 1).toString();
+      }
+    }
+
+    if (zoomBtn && lightboxOverlay) {
+      zoomBtn.addEventListener('click', openLightbox);
+      mainImageContainer?.addEventListener('click', openLightbox); // Changed mainImageEl to mainImageContainer
+    }
+
+    function openLightbox() {
+      if (lightboxOverlay && lightboxImage && imageData[currentImageIndex]) {
+        lightboxImage.src = imageData[currentImageIndex].src;
+        lightboxImage.alt = imageData[currentImageIndex].alt;
+        updateLightboxCounter();
+        lightboxOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLightbox() {
+      if (lightboxOverlay) {
+        lightboxOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function updateLightboxCounter() {
+      if (lightboxCounter && imageData.length > 1) {
+        lightboxCounter.textContent = `${currentImageIndex + 1} / ${imageData.length}`;
+      }
+    }
+
+    lightboxClose?.addEventListener('click', closeLightbox);
+    lightboxOverlay?.addEventListener('click', (e) => {
+      if (e.target === lightboxOverlay) closeLightbox();
+    });
+
+    lightboxPrev?.addEventListener('click', () => {
+      currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : imageData.length - 1;
+      updateMainImageDisplay();
+      updateThumbnailActive();
+      updateImageCounter();
+      if (lightboxImage) {
+        lightboxImage.src = imageData[currentImageIndex].src;
+        lightboxImage.alt = imageData[currentImageIndex].alt;
+      }
+      updateLightboxCounter();
+    });
+
+    lightboxNext?.addEventListener('click', () => {
+      currentImageIndex = currentImageIndex < imageData.length - 1 ? currentImageIndex + 1 : 0;
+      updateMainImageDisplay();
+      updateThumbnailActive();
+      updateImageCounter();
+      if (lightboxImage) {
+        lightboxImage.src = imageData[currentImageIndex].src;
+        lightboxImage.alt = imageData[currentImageIndex].alt;
+      }
+      updateLightboxCounter();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightboxOverlay?.classList.contains('active')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') lightboxPrev?.click();
+        if (e.key === 'ArrowRight') lightboxNext?.click();
+      }
+    });
+
+    const thumbnailScroll = document.getElementById('thumbnail-scroll');
+    const scrollLeftBtn = document.getElementById('scroll-left'); // Renamed to avoid conflict
+    const scrollRightBtn = document.getElementById('scroll-right'); // Renamed to avoid conflict
+
+    scrollLeftBtn?.addEventListener('click', () => {
+      thumbnailScroll?.scrollBy({ left: -120, behavior: 'smooth' });
+    });
+
+    scrollRightBtn?.addEventListener('click', () => {
+      thumbnailScroll?.scrollBy({ left: 120, behavior: 'smooth' });
+    });
+
+    const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+        
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        tabPanels.forEach(panel => {
+          panel.classList.remove('active');
+          if (panel.id === `${targetTab}-panel`) {
+            panel.classList.add('active');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Remove local :root variables, styles will inherit from global.css */
+
+  .product-page {
+    min-height: 100vh;
+    background: var(--light-bg); /* Global variable */
+  }
+
+  /* NEW Product Detail Header Styles (Inspired by project-detail-header) */
+  .product-detail-header {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-color) 100%); /* Global variable */
+    color: var(--text-light); /* Global variable */
+    padding: 2rem 0;
+    text-align: center;
+    margin-bottom: 2rem; /* Space before the white content area */
+  }
+
+  .product-detail-header .breadcrumb-nav { /* Style for breadcrumbs inside this new header */
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .product-detail-header .breadcrumb {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .product-detail-header .breadcrumb a {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .product-detail-header .breadcrumb a:hover {
+    color: white;
+  }
+   .product-detail-header .breadcrumb span[aria-current="page"] {
+    color: white;
+    font-weight: 600;
+  }
+  .product-detail-header .breadcrumb li:not(:last-child)::after {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+
+  .featured-product-badge { /* Style similar to project example */
+    display: inline-block;
+    background: var(--orange-color); /* Global variable for featured status */
+    color: var(--text-light); /* Text on dark/colored badge */
+    padding: 0.4rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .product-main-title { /* Style similar to project example */
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text-light); /* Ensure it's light on dark background */
+  }
+
+  .product-header-meta { /* Style similar to project example */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem; /* Row and column gap */
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    justify-content: center;
+  }
+  .product-header-meta .meta-item strong {
+    font-weight: 600;
+    color: var(--text-light);
+  }
+   .product-header-meta .meta-item a {
+    color: rgba(255,255,255,0.9);
+    text-decoration: underline;
+   }
+   .product-header-meta .meta-item a:hover {
+    color: white;
+   }
+
+
+  /* Main Content Area after new header */
+  .product-content-area { /* Was .product-hero */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem; /* Reduced gap a bit */
+    padding: 2rem 0; /* Add padding if it's directly on white bg now */
+    /* background: white; --- This can be removed if product-page bg is light-bg */
+    /* border-radius: 20px 20px 0 0; --- Removed if not doing the overlap effect */
+    /* box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1); --- Removed shadow */
+    position: relative;
+    z-index: 2; /* Keep if there was an overlap design */
+  }
+
+  @media (min-width: 1024px) {
+    .product-content-area {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem; /* Reduced gap */
+      /* padding: 2rem; If you want padding around this section */
+    }
+  }
+
+  /* Image Gallery */
+  .product-gallery-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .main-image-wrapper {
+    position: relative;
+  }
+
+  .main-image-container {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background: var(--light-gray); /* Global variable */
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--medium-gray);
+    cursor: zoom-in;
+  }
+
+  .main-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .main-image-container:hover .main-product-image {
+    transform: scale(1.05);
+  }
+
+  .zoom-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+
+  .zoom-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+
+  .image-counter {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--text-light); /* Global */
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* Thumbnail Gallery */
+  .thumbnail-gallery {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .thumbnail-scroll {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 0.5rem 0;
+  }
+
+  .thumbnail-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbnail-btn {
+    flex-shrink: 0;
+    border: 2px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    padding: 0.25rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thumbnail-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .thumbnail-btn.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+  }
+
+  .thumbnail-btn img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: calc(var(--border-radius) - 2px);
+  }
+
+  .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+
+  .scroll-btn:hover {
+    background: var(--light-gray);
+  }
+
+  .scroll-left { left: -20px; }
+  .scroll-right { right: -20px; }
+
+  /* Product Info Sidebar */
+  .product-info-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Adjusted gap */
+  }
+
+  .info-sidebar-stock { /* For potentially different styling if needed */
+    /* text-align: center; /* Center if desired */
+  }
+
+
+  .stock-status-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+     /* justify-content: center; /* Uncomment to center stock status */
+  }
+
+  .stock-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(var(--green-color-rgb, 3, 190, 3), 0.1);
+    border: 1px solid rgba(var(--green-color-rgb, 3, 190, 3), 0.2);
+    border-radius: var(--border-radius);
+  }
+
+  .stock-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green-color);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .stock-text {
+    font-weight: 600;
+    color: var(--green-color);
+    font-size: 0.875rem;
+  }
+
+  .product-summary {
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 1.5rem;
+  }
+
+  .short-description {
+    font-size: 1.1rem; /* Slightly smaller */
+    line-height: 1.7; /* Increased line height */
+    color: var(--text-color); /* Global variable */
+  }
+
+  /* Key Features */
+  .key-features h3 {
+    font-size: 1.2rem; /* Adjusted */
+    font-weight: 600;
+    color: var(--header-light-h1); /* Global variable */
+    margin-bottom: 1rem;
+    /* text-align: center; /* Center if desired */
+  }
+
+  .features-grid {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem; /* Adjusted */
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem; /* Adjusted */
+    background: var(--light-gray); /* Global variable */
+    border-radius: var(--border-radius);
+    border: 1px solid transparent; /* Use transparent border for hover effect */
+    transition: all 0.2s;
+  }
+
+  .feature-item:hover {
+    border-color: var(--medium-gray);
+    background: white; /* Lighten on hover */
+  }
+
+  .feature-icon {
+    flex-shrink: 0;
+    width: 36px; /* Adjusted */
+    height: 36px; /* Adjusted */
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+  }
+  .feature-icon .material-symbols-outlined {
+    font-size: 1.2rem;
+  }
+
+  .feature-text {
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto; /* Pushes to bottom if sidebar is taller */
+    justify-content: center; 
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem; /* Adjusted */
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.9rem; /* Adjusted */
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    /* flex: 1; --- Removed to allow natural width */
+    display: inline-flex; /* Changed */
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-primary {
+    background: var(--primary-color);
+    color: var(--text-light);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent; /* Changed */
+    color: var(--primary-color); /* Changed */
+    border: 2px solid var(--primary-color); /* Changed */
+  }
+
+  .btn-secondary:hover {
+    background: var(--primary-color); /* Changed */
+    color: var(--text-light); /* Changed */
+    transform: translateY(-1px);
+  }
+
+  /* Tabbed Content */
+  .product-details-tabs {
+    margin-top: 3rem; /* Adjusted */
+    padding-top: 2rem;
+    border-top: 1px solid var(--medium-gray);
+  }
+
+  .tab-nav {
+    display: flex;
+    gap: 0; /* Tabs touch */
+    border-bottom: 1px solid var(--medium-gray);
+    margin-bottom: 2rem;
+    justify-content: center; 
+  }
+
+  .tab-btn {
+    padding: 0.8rem 1.5rem; /* Adjusted */
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600; /* Bolder */
+    color: var(--secondary-color);
+    transition: all 0.2s;
+    position: relative;
+    font-size: 0.95rem; /* Adjusted */
+  }
+
+  .tab-btn:hover {
+    color: var(--primary-color);
+    background: var(--light-gray); /* Global variable */
+  }
+
+  .tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+  }
+
+  .tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Description Content */
+  .description-content h3,
+  .specifications-content h3,
+  .documents-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--header-light-h1); /* Global variable */
+    margin-bottom: 1.5rem;
+    text-align: center; 
+  }
+
+  .description-points {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .description-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--light-gray); /* Global variable */
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+  }
+
+  .point-icon {
+    color: var(--green-color);
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  .description-point span:last-child {
+    line-height: 1.6;
+  }
+
+  /* Specifications */
+  .specs-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .spec-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem; /* Adjusted */
+    background: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    transition: all 0.2s;
+  }
+
+  .spec-item:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+  }
+
+  .spec-label {
+    font-weight: 600;
+    color: var(--text-color);
+    flex: 1;
+    padding-right: 1rem; /* Add space */
+  }
+
+  .spec-value {
+    color: var(--secondary-color);
+    font-weight: 500;
+    text-align: right;
+    flex: 1;
+  }
+
+  /* Documents */
+  .documents-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .document-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem; /* Adjusted */
+    background: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .document-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb, 41, 164, 240), 0.05), rgba(var(--primary-color-rgb, 41, 164, 240), 0.1));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .document-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+
+  .document-card:hover::before {
+    opacity: 1;
+  }
+
+  .doc-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--primary-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    position: relative;
+    z-index: 1;
+  }
+
+  .doc-info {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .doc-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+  }
+
+  .download-text {
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+  }
+
+  .download-icon {
+    flex-shrink: 0;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s;
+  }
+
+  .document-card:hover .download-icon {
+    transform: translateY(-2px);
+  }
+
+  /* Lightbox Styles */
+  .lightbox-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: all 0.3s ease;
+  }
+  .lightbox-overlay.active { opacity: 1; visibility: visible; }
+  .lightbox-container { position: relative; max-width: 90vw; max-height: 90vh; display: flex; align-items: center; justify-content: center; }
+  .lightbox-content { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .lightbox-content img { max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: var(--border-radius); }
+  .lightbox-info {
+    background: rgba(var(--dark-blue-rgb, 1, 36, 92), 0.5);
+    backdrop-filter: blur(10px); padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius); color: var(--text-light); font-weight: 500;
+  }
+  .lightbox-close {
+    position: absolute; top: -60px; right: -60px; background: rgba(var(--dark-blue-rgb, 1, 36, 92), 0.5);
+    backdrop-filter: blur(10px); border: none; border-radius: 50%;
+    width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    color: var(--text-light); cursor: pointer; transition: all 0.2s;
+  }
+  .lightbox-close:hover { background: rgba(var(--dark-blue-rgb, 1, 36, 92), 0.7); transform: scale(1.1); }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); background: rgba(var(--dark-blue-rgb, 1, 36, 92), 0.3);
+    backdrop-filter: blur(10px); border: none; border-radius: 50%;
+    width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+    color: var(--text-light); cursor: pointer; transition: all 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(var(--dark-blue-rgb, 1, 36, 92), 0.5); transform: translateY(-50%) scale(1.1); }
+  .lightbox-prev { left: -80px; }
+  .lightbox-next { right: -80px; }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .product-detail-header .container { padding-left: 1rem; padding-right: 1rem; }
+    .product-main-title { font-size: 2rem; }
+    .hero-info-grid { grid-template-columns: 1fr; gap: 1rem; }
+    
+    .product-content-area { gap: 2rem; padding: 1rem 0; } /* Was .product-hero */
+    .action-buttons { flex-direction: column; }
+    .tab-nav { overflow-x: auto; scrollbar-width: none; }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn { white-space: nowrap; min-width: 120px; }
+    .specs-grid, .documents-grid { grid-template-columns: 1fr; }
+    .thumbnail-scroll { gap: 0.5rem; }
+    .thumbnail-btn img { width: 60px; height: 60px; }
+    .scroll-btn { display: none; }
+    .lightbox-close { top: 20px; right: 20px; }
+    .lightbox-nav { width: 48px; height: 48px; }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-content img { max-height: 70vh; }
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 0 1rem; } /* Already global, but can be reinforced */
+     .product-detail-header { padding: 1.5rem 0; }
+     .product-main-title { font-size: 1.8rem; }
+    .featured-product-badge { padding: 0.3rem 0.8rem; font-size: 0.7rem;}
+
+    .feature-item { padding: 0.75rem; }
+    .feature-icon { width: 32px; height: 32px; }
+    .feature-icon .material-symbols-outlined { font-size: 1.25rem; }
+    .description-point, .spec-item, .document-card { padding: 1rem; }
+    .btn { padding: 0.75rem 1.5rem; font-size: 0.875rem; }
+  }
+
+  /* Print Styles */
+  @media print {
+    .product-detail-header, .lightbox-overlay, .zoom-btn, .scroll-btn, .action-buttons { display: none !important; }
+    .product-content-area { grid-template-columns: 1fr; gap: 2rem; } /* Was .product-hero */
+    .main-image-container { max-height: 400px; }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Focus styles for keyboard navigation */
+  .thumbnail-btn:focus, .tab-btn:focus, .btn:focus, .document-card:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+  .lightbox-close:focus, .lightbox-nav:focus, .zoom-btn:focus, .scroll-btn:focus {
+    outline: 2px solid var(--text-light);
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .feature-item, .spec-item, .document-card { border-width: 2px; }
+    .stock-indicator { border-width: 2px; }
+  }
+</style>

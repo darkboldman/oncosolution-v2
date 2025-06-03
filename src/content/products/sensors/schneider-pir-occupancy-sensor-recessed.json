@@ -20,11 +20,11 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/Argus-motion-sensors.jpg",
+      "src": "/src/assets/images/products/sensors/Argus-motion-sensors.jpg",
       "alt": "Schneider® PIR occupancy sensors - Recessed image 1"
     },
     {
-      "src": "/images/products/sensors/Argus-motion-sensors-box.jpg",
+      "src": "/src/assets/images/products/sensors/Argus-motion-sensors-box.jpg",
       "alt": "Schneider® PIR occupancy sensors - Recessed image 2"
     }
   ],

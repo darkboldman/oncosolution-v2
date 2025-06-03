@@ -1,0 +1,96 @@
+---
+// src/pages/products/category/[category]/[...page].astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { GetStaticPathsOptions } from 'astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../../components/PageHeader.astro';
+import ProductCategoryFilterBar from '../../../../components/ProductCategoryFilterBar.astro';
+import ProductCard from '../../../../components/ProductCard.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import allCategories from '../../../../data/categories.json';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allProducts = await getCollection('products');
+  const paths = [];
+
+  for (const category of allCategories) {
+    // 1. Filter products for the current category
+    const categoryProducts = allProducts.filter(
+      (product) => product.data.category_id === category.id
+    );
+
+    // Skip creating pages for categories with no products
+    if (categoryProducts.length === 0) continue;
+
+    // 2. Sort the filtered products (featured first, then alpha)
+    const sortedProducts = categoryProducts.sort((a, b) => {
+      if (a.data.isFeatured && !b.data.isFeatured) return -1;
+      if (!a.data.isFeatured && b.data.isFeatured) return 1;
+      return a.data.name.localeCompare(b.data.name);
+    });
+
+    // 3. Paginate the results for this category
+    // We pass the category info in the props to use it on the page
+    const paginatedResult = paginate(sortedProducts, {
+      pageSize: 12,
+      params: { category: category.id }, // Pass category slug to the URL
+      props: { category: category },   // Pass full category object to the page
+    });
+    
+    paths.push(...paginatedResult);
+  }
+
+  return paths;
+}
+
+const { page, category } = Astro.props;
+
+// Create the category slug map for building product URLs
+const categorySlugMap = new Map(allCategories.map(cat => [cat.id, cat.id]));
+const metaDescription = `Browse our ${category.name} products. Page ${page.currentPage} of ${page.lastPage}.`;
+---
+
+<BaseLayout title={`${category.name} | Onco Solutions Products`}>
+  <meta slot="head" name="description" content={metaDescription} />
+
+  {/* Page header now shows the current category name */}
+  <PageHeader 
+    title={category.name}
+    subtitle={`Browse our high-quality products in the ${category.name} category.`}
+  />
+
+  {/* The filter bar now highlights the active category */}
+  <ProductCategoryFilterBar currentFilterId={category.id} />
+
+  <main class="product-grid-section">
+    <div class="container">
+      {page.data.length > 0 ? (
+        <div class="product-grid">
+          {page.data.map((product: CollectionEntry<'products'>) => (
+            <ProductCard 
+              product={product} 
+              categorySlug={categorySlugMap.get(product.data.category_id) || 'uncategorized'} 
+            />
+          ))}
+        </div>
+      ) : (
+        <p>No products found in this category.</p>
+      )}
+    </div>
+  </main>
+
+  {/* The pagination component now uses the dynamic base path for the category */}
+  <Pagination page={page} base={`/products/category/${category.id}`} />
+
+</BaseLayout>
+
+<style>
+  .product-grid-section {
+    padding: 2rem 0;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+</style>

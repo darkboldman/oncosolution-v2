@@ -20,7 +20,7 @@
   "stockStatus": "In stock",
   "images": [
     {
-      "src": "/images/products/sensors/ip-65-motion-detectors.jpg",
+      "src": "/src/assets/images/products/sensors/ip-65-motion-detectors.jpg",
       "alt": "Microwave motion Sensor-MW-IP65 image 1"
     }
   ],

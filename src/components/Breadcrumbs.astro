@@ -1,0 +1,91 @@
+---
+// src/components/Breadcrumbs.astro
+export interface BreadcrumbItem {
+  text: string;
+  href?: string;
+}
+
+export interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+{items && items.length > 0 && (
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <div class="container">
+      <ol class="breadcrumb">
+        {items.map((item, index) => (
+          <li>
+            {item.href ? (
+              <a href={item.href}>
+                {item.text === 'Home' && <span class="material-symbols-outlined">home</span>}
+                {item.text}
+              </a>
+            ) : (
+              <span aria-current="page">{item.text}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+)}
+
+<style>
+  /* Styles adapted directly from your product detail page for consistency */
+  .breadcrumb-nav {
+    /* background: var(--light-gray); */
+    /* border-bottom: 1px solid var(--medium-gray); */
+    padding: 1rem 0;
+    margin-bottom: 1.5rem; Added margin for spacing
+  }
+
+  .breadcrumb {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--secondary-color);
+    flex-wrap: wrap; /* Allow breadcrumbs to wrap on small screens */
+  }
+
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .breadcrumb li:not(:last-child)::after {
+    content: '/';
+    margin-left: 0.5rem;
+    color: var(--dark-gray);
+  }
+
+  .breadcrumb a,
+  .breadcrumb span[aria-current="page"] {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .breadcrumb span[aria-current="page"] {
+    color: var(----light-gray); /* Current page text color */
+    font-weight: 500;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+
+  .breadcrumb .material-symbols-outlined {
+    font-size: 1.1em; /* Slightly larger icon */
+    margin-right: 0.1em;
+  }
+</style>

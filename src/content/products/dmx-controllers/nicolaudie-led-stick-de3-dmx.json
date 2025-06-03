@@ -22,15 +22,15 @@
   "stockStatus": "Order on demand",
   "images": [
     {
-      "src": "/images/products/dmx-controllers/nicolaudie-led-stick-de3-dmx.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/nicolaudie-led-stick-de3-dmx.jpg",
       "alt": "Nicolaudie® LED Stick DE3 DMX image 1"
     },
     {
-      "src": "/images/products/dmx-controllers/nicolodie-STICK-D3-black-white-package.jpg",
+      "src": "/src/assets/images/products/dmx-controllers/nicolodie-STICK-D3-black-white-package.jpg",
       "alt": "Nicolaudie® LED Stick DE3 DMX image 2"
     },
     {
-      "src": "/images/products/dmx-controllers/nicolodie-STICK-DE3-white.png",
+      "src": "/src/assets/images/products/dmx-controllers/nicolodie-STICK-DE3-white.png",
       "alt": "Nicolaudie® LED Stick DE3 DMX image 3"
     }
   ],
