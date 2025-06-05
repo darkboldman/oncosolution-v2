@@ -178,9 +178,12 @@ const animationDuration = actualCategories.length * 8;
     margin-right: 0; 
   }
    /* Add back margin to the actual last child of the duplicated track to maintain spacing before loop restarts */
-  .scrolling-track > .filter-item:nth-child({actualCategories.length}) {
+  /* .scrolling-track > .filter-item:nth-child({actualCategories.length}) {
       margin-right: 0.75rem;
-  }
+  } */
+   .scrolling-track > .filter-item:not(:last-child) {
+      margin-right: 0.75rem;
+}
 
 
   .filter-item:hover {
